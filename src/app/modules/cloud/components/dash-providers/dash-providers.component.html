@@ -1,0 +1,51 @@
+<h4>Providers</h4>
+
+
+<div class="row mt-5">
+  <div class="col-4">
+    <div class="list-group" id="list-tab" role="tablist">
+
+      <a class="list-group-item list-group-item-action"
+        *ngFor="let provider of $providers | async ; index as i "
+        id="{{provider.name}}-{{provider.id}}-list"
+        data-toggle="list"
+        href="#{{provider.name}}-{{provider.id}}"
+        role="tab" aria-controls="{{provider.name}}"
+        [ngClass]="{'active': i==0}">{{provider.name}}</a>
+    </div>
+  </div>
+  <div class="col-8">
+    <div class="tab-content" id="nav-tabContent">
+      <div class="tab-pane fade show"
+          *ngFor="let provider of $providers | async ; index as i "
+          id="{{provider.name}}-{{provider.id}}" role="tabpanel"
+          aria-labelledby="{{provider.name}}-{{provider.id}}-list"
+          [ngClass]="{'active': i==0}"
+        >
+
+        <table class="table">
+          <thead class="thead-dark">
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">First</th>
+              <th scope="col">Last</th>
+              <!-- <th scope="col">Handle</th> -->
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let entity of provider.entities"  >
+              <th scope="row">{{ entity.id }}</th>
+              <td>{{ entity.name }}</td>
+              <td><button class="btn btn-warning btn-sm"> Dettach Entity </button></td>
+              <!-- <td>@mdo</td> -->
+            </tr>
+          </tbody>
+        </table>
+
+
+      </div>
+
+
+    </div>
+  </div>
+</div>

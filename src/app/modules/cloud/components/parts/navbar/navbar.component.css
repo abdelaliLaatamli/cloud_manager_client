@@ -1,0 +1,17 @@
+.nav-item-active {
+  border-left: 3px solid #007bff;
+  background-image: linear-gradient(to right, #007bff3d, #007bff21,#007bff14, #007bff07 , #007bff00 );
+}
+
+
+
+.nav-link-dark {
+  display: block;
+  padding: .5rem 1rem;
+  color: #343a40;
+}
+
+
+.nav-link-dark:focus, .nav-link-dark:hover {
+  text-decoration: none;
+}

@@ -1,0 +1,47 @@
+.btn-circle.btn-sm {
+  width: 30px;
+  height: 30px;
+  padding: 6px 0px;
+  border-radius: 15px;
+  font-size: 8px;
+  text-align: center;
+}
+.btn-circle.btn-md {
+  width: 50px;
+  height: 50px;
+  padding: 7px 10px;
+  border-radius: 25px;
+  font-size: 10px;
+  text-align: center;
+}
+.btn-circle.btn-xl {
+  width: 70px;
+  height: 70px;
+  padding: 10px 16px;
+  border-radius: 35px;
+  font-size: 12px;
+  text-align: center;
+}
+
+
+.badge-notifefication-cercle{
+  position: absolute;
+  top: -3px;
+  right: 0px;
+  padding: 4px;
+  border-radius: 50%;
+  background: red;
+  color: white;
+}
+
+
+
+/* .nav-item-active:parent {
+  border-left: 3px solid #007bff;
+  background-image: linear-gradient(to right, #007bff3d, #007bff21,#007bff14, #007bff07 , #007bff00 );
+}
+
+.nav-item-active {
+  color: #007bff!important;
+} */
+/* color: #343a40!important; */

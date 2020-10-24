@@ -1,0 +1,39 @@
+
+
+<div class="container-fluid " id="divAll">
+
+  <div class="row">
+    <div class="col-md-4 offset-md-4 px-md-5 px-sm-2 ">
+    <div class="card crd-media mx-md-5" >
+
+        <!-- <div class="card-header">  Header </div> -->
+        <div class="card-body">
+          <!-- <h2 class="card-title text-center mt-5">Login</h2> -->
+          <div class="text-center mt-5">
+          <img src="assets/svgs/login.svg" alt="" width="70px" height="70px" >
+          </div>
+          <form [formGroup]="loginForm" (ngSubmit)="login()"  class="mt-5 mb-4 mx-md-5 mx-lg-5 mx-sm-3 ">
+            <!-- <form class="mt-5 mb-4 mx-5 "> -->
+            <div class="form-group">
+              <input type="email" formControlName="email" class="form-control form-control-lg" id="exampleInputEmail1" aria-describedby="emailHelp">
+            </div>
+            <div class="form-group">
+              <input type="password" formControlName="password" class="form-control form-control-lg" id="exampleInputPassword1">
+            </div>
+            <!-- <div class="form-group form-check">
+              <input type="checkbox" class="form-check-input" id="exampleCheck1">
+              <label class="form-check-label" for="exampleCheck1">Check me out</label>
+            </div> -->
+            <button type="submit" class="btn btn-lg btn-primary mt-4 w-100">Login</button>
+          </form>
+
+
+        </div>
+
+        <!-- <div class="card-footer text-muted"> Footer </div> -->
+
+    </div>
+  </div>
+  </div>
+</div>
+

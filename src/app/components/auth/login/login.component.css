@@ -1,0 +1,14 @@
+#divAll{
+  height: 100vh;
+  background-color: #efefef;
+  position: fixed;
+}
+.crd-media {
+  margin-top:200px;
+}
+
+@media only screen and (max-width: 600px) {
+  .crd-media {
+    margin-top:50px;
+  }
+}

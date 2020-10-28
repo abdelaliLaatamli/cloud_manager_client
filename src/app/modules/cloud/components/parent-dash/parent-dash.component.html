@@ -9,9 +9,7 @@
 
         <div class="row h-100">
 
-          <!-- <div class="col-2 col-sm-1 col-md-3 col-lg-2 col-xl-2 bg-light shadow-sm auto d-flex align-items-center justify-content-start"  [ngClass]="{'bg-light': !isMobile , 'shadow-sm': !isMobile}"  id="div-btn-collapse" > -->
-          <div class="col-2 col-sm-1 col-md-3 col-lg-2 col-xl-2 bg-light shadow-sm auto d-flex align-items-center justify-content-start"  [ngClass]="{'bg-light shadow-sm': !isMobile}"  id="div-btn-collapse" >
-            <!-- <button class="btn btn-light btn-sm d-md-none" (click)="showSidebare=!showSidebare" ><i class="fas fa-bars"></i></button> -->
+          <div class="col-2 col-sm-1 col-md-3 col-lg-2 col-xl-2 bg-light shadow-sm auto d-flex align-items-center justify-content-start"  [ngClass]="{'bg-light shadow-sm': !isMobile}" >
             <button class="btn btn-light btn-sm d-md-none" (click)="showSidebare=!showSidebare" ><i class="fas fa-bars"></i></button>
           </div>
 
@@ -37,7 +35,7 @@
                     <a class="dropdown-item d-md-none" href="#">{{this.user.name}}</a>
                     <!-- <a class="dropdown-item" href="#">Action</a> -->
                     <!-- <a class="dropdown-item" href="#">Another action</a> -->
-                    <a class="dropdown-item" (click)="logout()" href="#">logout</a>
+                    <a class="dropdown-item" (click)="logout()" href="#">Logout</a>
                   </div>
               </div>
 
@@ -53,23 +51,17 @@
     <div class="row">
 
       <!-- -- start sidebar -- -->
-        <div class="col-md-3 h-100 col-lg-2 col-xl-2 bg-light position-fixed shadow-sm pl-0" [ngClass]="{'d-none d-md-block': showSidebare}" style="z-index: 1;" >
+        <div class="col-md-3 h-100 col-lg-2 col-xl-2 bg-light position-fixed shadow-sm pl-0" [ngClass]="{'d-none d-md-block': showSidebare}" style="z-index: 10;" >
           <app-navbar></app-navbar>
         </div>
-
-        <!-- -- end sidebar -- -->
+      <!-- -- end sidebar -- -->
 
 
 
         <!-- -- start main content -- -->
         <main class="col-md-9 col-lg-10 col-xl-10  ml-auto">
 
-
-
-
-          <!-- <h3> Instances </h3> -->
           <router-outlet></router-outlet>
-
 
         </main>
         <!-- -- end main content -- -->

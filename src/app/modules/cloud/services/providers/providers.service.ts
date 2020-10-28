@@ -14,11 +14,8 @@ export class ProvidersService {
 
   getProviders () : Observable<any> {
 
-      let base = this.http.get( `${environment.apiUrl}/providerss` )
-      // let base = this.http.get( `${environment.apiUrl}/providers` )
-
+      let base = this.http.get( `${environment.apiUrl}/providers` )
       return base ;
-
   }
 
 

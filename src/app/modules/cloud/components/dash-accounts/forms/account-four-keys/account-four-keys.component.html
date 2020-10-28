@@ -1,0 +1,32 @@
+<form [formGroup]="accountForm" (ngSubmit)="onSubmit()" >
+
+  <div class="form-group">
+    <label for="exampleInputEmail1">Name</label>
+    <input type="text" formControlName="name" class="form-control form-control-sm" id="exampleInputEmail1" aria-describedby="emailHelp">
+  </div>
+
+  <div class="form-group">
+    <label for="exampleInputPassword1">accessKey</label>
+    <input type="text" formControlName="accessKey" class="form-control form-control-sm" id="exampleInputPassword1">
+  </div>
+
+  <div class="form-group">
+    <label for="exampleInputPassword1">secriteKey</label>
+    <input type="text" formControlName="secriteKey" class="form-control form-control-sm" id="exampleInputPassword1">
+  </div>
+
+  <div class="form-group">
+    <label for="exampleInputPassword1">subscription</label>
+    <input type="text" formControlName="subscription" class="form-control form-control-sm" id="exampleInputPassword1">
+  </div>
+
+  <div class="form-group">
+    <label for="exampleInputPassword1">tenant</label>
+    <input type="text" formControlName="tenant"  class="form-control form-control-sm" id="exampleInputPassword1">
+  </div>
+
+
+  <button type="submit" class="btn btn-primary btn-sm float-right"><i class="far fa-save"></i> Save</button>
+
+</form>
+

@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { ProvidersService } from './../../services/providers/providers.service';
+import { ToastrService } from 'ngx-toastr';
+import { catchError } from 'rxjs/operators';
+
 
 @Component({
   selector: 'app-dash-providers',
@@ -10,15 +13,25 @@ import { ProvidersService } from './../../services/providers/providers.service';
 export class DashProvidersComponent implements OnInit {
 
 
-  $providers : Observable<any> ;
+  $providers: Observable<any> ;
 
-  constructor( private providerService : ProvidersService ) { }
+  constructor( private providerService: ProvidersService , private toastr: ToastrService ) { }
 
   ngOnInit(): void {
-    this.$providers = this.providerService.getProviders()
-    this.$providers.subscribe( res => console.log(res) , err => console.log( err ) )
+    this.$providers = this.providerService.getProviders().pipe(
+        catchError( err => {
+          this.showError( err.error )
+          return throwError(err);
+        })
+    )
+
   }
 
+
+
+  showError( err ):void {
+    this.toastr.error( err.message , err.error );
+  }
 
 
 

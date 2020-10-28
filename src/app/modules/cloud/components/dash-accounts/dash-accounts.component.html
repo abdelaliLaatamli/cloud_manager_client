@@ -1,1 +1,89 @@
-<p>dash-accounts works!</p>
+<h4>Accounts</h4>
+
+<div class="row mt-5" *ngIf="$providers | async as providers" >
+  <div class="col-4 pr-0">
+    <div class="list-group" id="list-tab" role="tablist">
+
+      <a class="list-group-item list-group-item-action pl-2"
+        *ngFor="let provider of providers ; index as i "
+        id="{{provider.name}}-{{provider.id}}-list"
+        data-toggle="list"
+        href="#{{provider.name}}-{{provider.id}}"
+        role="tab" aria-controls="{{provider.name}}"
+        (click)="loadAccounts(provider)"
+        >{{provider.name | titlecase}}</a>
+    </div>
+  </div>
+  <div class="col-8">
+    <div class="tab-content" id="nav-tabContent">
+      <div class="tab-pane fade"
+          *ngFor="let provider of providers ; index as i "
+          id="{{provider.name}}-{{provider.id}}" role="tabpanel"
+          aria-labelledby="{{provider.name}}-{{provider.id}}-list"
+        >
+        <button class="btn btn-primary mb-1 btn-sm float-right " (click)="showAddAccountModal(provider)" ><i class="fas fa-plus"></i> Accounts</button>
+        <table class="table">
+          <thead class="thead-dark">
+            <tr *ngIf="currentProvider">
+              <th *ngFor="let item of getAccountKeys(currentProvider.providerKeysType)"  scope="col" >{{item | titlecase}}</th>
+              <th > operations </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let account of $acconts | async"  >
+              <th  *ngFor="let item of getAccountKeys(currentProvider.providerKeysType)" scope="row">{{ account[item] }}</th>
+              <td class="text-center">
+                  <button class="btn btn-warning btn-sm mx-1" (click)="editAccount(account)" > <i class="fas fa-edit"></i>  </button>
+                  <button class="btn btn-danger  btn-sm" (click)="deleteAccount(account.id)"> <i class="fas fa-trash"></i> </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+
+      </div>
+
+
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="addAccounts" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" *ngIf="currentProvider" >
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Add Account</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div [ngSwitch]="currentProvider.providerKeysType">
+          <app-account-one-key
+              *ngSwitchCase="'ONEKEY'"
+              [account]="accountMisajour"
+              (setAccountToFatherEvent)="getSubmit($event)"
+              ></app-account-one-key>
+          <app-account-two-keys
+              *ngSwitchCase="'TWOKEYS'"
+              [account]="accountMisajour"
+              (setAccountToFatherEvent)="getSubmit($event)"
+              ></app-account-two-keys>
+          <app-account-four-keys
+              *ngSwitchCase="'FOURKEYS'"
+              [account]="accountMisajour"
+              (setAccountToFatherEvent)="getSubmit($event)"
+              ></app-account-four-keys>
+
+          <div *ngSwitchDefault>eee</div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+

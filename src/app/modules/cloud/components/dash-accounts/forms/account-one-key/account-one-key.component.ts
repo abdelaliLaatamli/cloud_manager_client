@@ -45,7 +45,7 @@ export class AccountOneKeyComponent implements OnInit {
 
   onSubmit(){
     // console.log( this.accountForm.value )
-    this.setAccountToFatherEvent.emit(this.accountForm.value)
+    this.setAccountToFatherEvent.emit(this.accountForm.value )
   }
 
 }

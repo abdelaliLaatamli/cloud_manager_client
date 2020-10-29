@@ -34,7 +34,7 @@
               <th  *ngFor="let item of getAccountKeys(currentProvider.providerKeysType)" scope="row">{{ account[item] }}</th>
               <td class="text-center">
                   <button class="btn btn-warning btn-sm mx-1" (click)="editAccount(account)" > <i class="fas fa-edit"></i>  </button>
-                  <button class="btn btn-danger  btn-sm" (click)="deleteAccount(account.id)"> <i class="fas fa-trash"></i> </button>
+                  <button class="btn btn-danger  btn-sm" (click)="deleteAccount(account)"> <i class="fas fa-trash"></i> </button>
               </td>
             </tr>
           </tbody>

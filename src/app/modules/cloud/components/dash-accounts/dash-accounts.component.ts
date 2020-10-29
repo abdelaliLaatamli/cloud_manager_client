@@ -4,7 +4,7 @@ import { ProvidersService } from '../../services/providers/providers.service';
 import { catchError } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
 import { AccountsService } from './../../services/accounts/accounts.service';
-import { AccountForKeys } from './../../interfaces/account-for-keys';
+import { Account } from './../../interfaces/account';
 
 declare var $: any;
 
@@ -54,7 +54,7 @@ export class DashAccountsComponent implements OnInit {
       })
     )
 
-    //this.$acconts.subscribe( e => console.log(e) , er => console.log( er ) )
+
   }
 
 
@@ -69,45 +69,71 @@ export class DashAccountsComponent implements OnInit {
 
   showAddAccountModal(): void {
 
-    //console.log( provider )
     this.accountMisajour = null
     $('#addAccounts').modal('show')
 
   }
 
   getSubmit( account ){
-    // console.log( account )
+    //console.log( account )
 
-    this.accountService.addAccount( this.currentProvider.id , account )
-                        .subscribe(
-                             elem => {
-                              this.showSuccess( elem )
+    if( account.id != null ){
+      console.log( "edit" )
+      //delete person.age;
+      this.accountService.editAccount(account.id , account)
+                          .subscribe(
+                            (elem:Account)  => {
+                              this.showSuccess( elem , "Account Updated" )
                               $('#addAccounts').modal('hide')
                               this.loadAccounts( this.currentProvider )
                             } ,
                             err => this.showError( err.error )
-                        )
+                          )
+
+    }else {
+      // console.log( "add" )
+      this.accountService.addAccount( this.currentProvider.id , account )
+      .subscribe(
+           (elem:Account)  => {
+            this.showSuccess( elem , "Account added" )
+            $('#addAccounts').modal('hide')
+            this.loadAccounts( this.currentProvider )
+          } ,
+          err => this.showError( err.error )
+      )
+
+    }
+
+
+
 
   }
 
-  showSuccess( msg : Account ): void {
-    this.toastr.success( msg.name , "Account added" );
+  showSuccess( account : Account , message ): void {
+    this.toastr.success( account.name , message  );
   }
 
   editAccount(account){
 
     this.accountMisajour = account
 
-    console.log( account )
+   // console.log( account )
     $('#addAccounts').modal('show')
 
 
   }
 
 
-  deleteAccount(accountId){
-    console.log( accountId )
+  deleteAccount(account:Account){
 
+    this.accountService.deleteAccount(account.id)
+                        .subscribe(
+                          elem => {
+                          this.showSuccess( account , "Account has been Deleted" )
+                          this.loadAccounts( this.currentProvider )
+                        } ,
+                       err => this.showError( err.error )
+                      );
 
   }
 

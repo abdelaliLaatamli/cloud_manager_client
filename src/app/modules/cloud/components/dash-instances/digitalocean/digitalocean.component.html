@@ -1,0 +1,13 @@
+<div class="jumbotron py-3 mx-5">
+
+  <form class="form-inline">
+    <label class="my-1 mr-2  col-form-label col-form-label-sm " for="inlineFormCustomSelectPref">Accounts</label>
+    <select class="custom-select custom-select-sm my-1 mr-sm-2" id="inlineFormCustomSelectPref"  >
+      <option value="-1">Choose Account </option>
+      <option *ngFor="let account of provider.accounts " value="{{account.id}}" >{{ account.name }}</option>
+
+    </select>
+    <button type="submit" class="btn btn-primary btn-sm my-1">Get Servers</button>
+  </form>
+
+</div>

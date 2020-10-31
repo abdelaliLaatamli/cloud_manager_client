@@ -19,7 +19,8 @@ import { DashHelpComponent } from './components/dash-help/dash-help.component';
 import { AccountFourKeysComponent } from './components/dash-accounts/forms/account-four-keys/account-four-keys.component';
 import { AccountOneKeyComponent } from './components/dash-accounts/forms/account-one-key/account-one-key.component';
 import { AccountTwoKeysComponent } from './components/dash-accounts/forms/account-two-keys/account-two-keys.component';
-
+import { DigitaloceanComponent } from './components/dash-instances/digitalocean/digitalocean.component';
+import { AzureComponent } from './components/dash-instances/azure/azure.component';
 
 
 @NgModule({
@@ -38,6 +39,8 @@ import { AccountTwoKeysComponent } from './components/dash-accounts/forms/accoun
     AccountFourKeysComponent,
     AccountOneKeyComponent,
     AccountTwoKeysComponent,
+    DigitaloceanComponent,
+    AzureComponent,
 
   ],
   imports: [

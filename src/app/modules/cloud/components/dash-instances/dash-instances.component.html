@@ -1,1 +1,28 @@
-<p>dash-instances works!</p>
+<h4>Instances</h4>
+<div class="row">
+  <div class="col-md-12">
+
+    <ul class="list-group list-group-horizontal d-flex justify-content-center" *ngIf="$providers | async as providers">
+      <li
+          class="list-group-item pointer "
+          *ngFor="let provider of providers ; index as i "
+          (click)="currentProvider=provider"
+          [ngClass]="{'active' : currentProvider==provider}"
+        >{{provider.name | titlecase}}</li>
+    </ul>
+
+  </div>
+</div>
+
+<div class="row" *ngIf="currentProvider" >
+
+  <div class="col-md-12 mt-5" [ngSwitch]="currentProvider.name"  >
+
+
+    <app-digitalocean *ngSwitchCase="'Digitalocean'" [provider]="currentProvider" ></app-digitalocean>
+    <app-azure *ngSwitchCase="'Azure'" ></app-azure>
+    <div *ngSwitchDefault>We didn't have Template yet for this Provider</div>
+
+  </div>
+
+</div>

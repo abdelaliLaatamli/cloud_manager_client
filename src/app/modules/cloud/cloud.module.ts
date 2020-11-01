@@ -21,6 +21,7 @@ import { AccountOneKeyComponent } from './components/dash-accounts/forms/account
 import { AccountTwoKeysComponent } from './components/dash-accounts/forms/account-two-keys/account-two-keys.component';
 import { DigitaloceanComponent } from './components/dash-instances/digitalocean/digitalocean.component';
 import { AzureComponent } from './components/dash-instances/azure/azure.component';
+import { FilterAccountsActivesPipe } from './pipes/filter-accounts-actives.pipe';
 
 
 @NgModule({
@@ -41,6 +42,7 @@ import { AzureComponent } from './components/dash-instances/azure/azure.componen
     AccountTwoKeysComponent,
     DigitaloceanComponent,
     AzureComponent,
+    FilterAccountsActivesPipe,
 
   ],
   imports: [

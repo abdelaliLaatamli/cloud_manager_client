@@ -3,13 +3,19 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from './../../../../../environments/environment.prod';
 import { Observable } from 'rxjs';
 import { InstanceDB } from './../../interfaces/instance';
+import { ResponseGeneratorService } from '../responseGenerator/response-generator.service';
+
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class InstanceService {
 
-  constructor( private http: HttpClient ) { }
+  constructor(
+    private http: HttpClient ,
+    private responseGeneratorService: ResponseGeneratorService
+    ) { }
 
   getInstances( accountId : number) :Observable<any>{
 
@@ -27,17 +33,54 @@ export class InstanceService {
   }
 
   addInstance( instances , accountId ){
-      // console.log( instances )
 
       let base = this.http.post( `${environment.apiUrl}/instances/${accountId}` , instances )
       return base ;
   }
 
   deleteInstance( instanceId , accountId ){
-    //console.log( instanceId , accountId )
 
     let base = this.http.delete( `${environment.apiUrl}/instances/${accountId}/${instanceId}` )
     return base ;
+
+  }
+
+
+  installInsance( instance ) : { code : number , message : string , db? : Observable<InstanceDB> } {
+
+    // let body: any = {
+
+    //   server_name : instance.name   ,
+    //   main_ip     : instance.networks.v4[1].ip_address  ,
+    //   vmta_domain : instance.database.vmtaDomain
+
+    // } ;
+
+    let response : { code : number , message : string  , db ? : Observable<InstanceDB> } = this.responseGeneratorService.generateInstalationResponse()
+
+    if( response.code == 200 ){
+      let instanceRequest : InstanceDB = {
+
+        instanceId  : instance.id ,
+        name        : instance.name ,
+        vmtaDomain  : instance.database.vmtaDomain ,
+        mainIp      : instance.networks.v4[1].ip_address ,
+        isInstalled : true
+      }
+
+      let base = this.http.put<InstanceDB>(`${environment.apiUrl}/instances/update/install/${instance.id}` , instanceRequest );
+
+      response.db = base
+
+    }
+
+    return response
+    // console.log( `${environment.apiUrl}/instances/update/install/${instance.id}` )
+
+    // if( response.code == 200 )
+      //let base = this.http.put<InstanceDB>(`${environment.apiUrl}/instances/update/vmta/${instance.id}` , vmtaUpdate);
+    // return base ;
+
   }
 
 }

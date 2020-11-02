@@ -88,9 +88,7 @@ export class DigitaloceanComponent implements OnInit {
   }
 
   getServers(){
-
     this.$instances = this.instanceService.getInstances(this.accountId)
-
   }
 
   addInstancesShowModal(){
@@ -145,6 +143,24 @@ export class DigitaloceanComponent implements OnInit {
                           this.getServers( );
                           this.showSuccess( instance , "Instance Deleted" )
                         }  , err => this.showError( err.error ) )
+
+  }
+
+  installServer(instance){
+    console.log( instance )
+    response = this.instanceService.installInsance( instance )
+    console.log( response )
+    response.db.subscribe((e) => {
+       console.log(e)
+    }  , err => this.showError( err.error ) )
+    // .subscribe((e) => {
+    //   this.getServers( );
+    //   this.showSuccess( instance , "Instance Deleted" )
+    // }  , err => this.showError( err.error ) )
+  }
+
+  configInstnce(instance){
+    // console.log( instance )
 
   }
 

@@ -1,6 +1,6 @@
 <div class="jumbotron py-2 mx-5">
 
-  <button class="btn btn-primary btn-sm float-right mt-1" [disabled]="accountId==-1" (click)="addInstances()" ><i class="fas fa-plus"></i> Account</button>
+  <button class="btn btn-primary btn-sm float-right mt-1" [disabled]="accountId==-1" (click)="addInstancesShowModal()" ><i class="fas fa-plus"></i> Account</button>
 
   <form class="form-inline">
     <label class="my-1 mr-2  col-form-label col-form-label-sm " for="inlineFormCustomSelectPref">Accounts</label>
@@ -24,6 +24,8 @@
         <tr>
           <th scope="col" class="text-center" >#</th>
           <th scope="col" class="text-center" >Name</th>
+          <th scope="col" class="text-center" >Region</th>
+          <th scope="col" class="text-center" >Size</th>
           <th scope="col" class="text-center" >Public Ip</th>
           <th scope="col" class="text-center" >Vmta Dns</th>
           <th scope="col" class="text-center" >Install</th>
@@ -34,6 +36,8 @@
         <tr *ngFor="let instance of $instances|async" >
           <th scope="row" class="text-center" > <input class="form-check-input" type="checkbox" value="" id="defaultCheck1"> </th>
           <td class="text-center" > {{ instance.name }} </td>
+          <td class="text-center" > {{ instance.region.name }} </td>
+          <td class="text-center" > {{ instance.size.slug }} </td>
           <td class="text-center" > {{ instance.networks.v4[1].ip_address }} </td>
           <td class="text-center" [ngSwitch]="instance.database!=null && instance.database.vmtaDomain!=null">
             <div  *ngSwitchCase="true"  > {{ instance.database.vmtaDomain }} </div>
@@ -45,7 +49,7 @@
               </div>
           </td>
           <td class="text-center" > <button class="btn btn-primary btn-sm"> install </button> </td>
-          <td class="text-center" > <button class="btn btn-danger btn-sm"> <i class="fas fa-trash"></i> </button> </td>
+          <td class="text-center" > <button class="btn btn-danger btn-sm" (click)="deleteInstance(instance)"> <i class="fas fa-trash"></i> </button> </td>
         </tr>
       </tbody>
     </table>
@@ -63,17 +67,25 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Modal title</h5>
+        <h5 class="modal-title">Update Vmta</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        <p>Modal body text goes here.</p>
+
+        <form [formGroup]="instanceForm" (ngSubmit)="updateVmta()" >
+          <div class="form-group">
+            <label for="exampleInputEmail1">Vmta Domain</label>
+            <input type="text" formControlName="vmtaDomain" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter Vmta domain">
+          </div>
+          <button type="submit" class="btn btn-primary btn-sm float-right" [disabled]="!instanceForm.valid" ><i class="far fa-save"></i> Vmta </button>
+        </form>
+
+
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary btn-sm">Save changes</button>
       </div>
     </div>
   </div>
@@ -85,17 +97,51 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Add instances</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        ...
+
+        <form [formGroup]="addInstanceForm" (ngSubmit)="addInstance()" >
+
+          <div class="form-row">
+
+            <div class="form-group col-md-4">
+              <label class="col-form-label col-form-label-sm" for="region">Region</label>
+              <select id="inputState" class="form-control form-control-sm" formControlName="region">
+                <option *ngFor="let region of regions" value="{{region.slug}}" > {{region.name}} </option>
+              </select>
+            </div>
+
+            <div class="form-group col-md-8">
+              <label class="col-form-label col-form-label-sm" for="name">Name</label>
+              <input type="text" class="form-control form-control-sm" id="name" formControlName="name" >
+            </div>
+
+          </div>
+
+          <div class="form-row">
+            <div class="form-group col-md-8">
+              <label class="col-form-label col-form-label-sm" for="vmta">Vmta Domain</label>
+              <input type="text" class="form-control form-control-sm" id="vmta" formControlName="vmtaDomain" >
+            </div>
+            <div class="form-group col-md-4">
+              <label class="col-form-label col-form-label-sm " for="instances" >N° Instances</label>
+              <select id="instances" class="form-control form-control-sm" formControlName="numberInstances">
+                <option *ngFor="let item of range(10 , 1)" [value]="item" >{{item}}</option>
+              </select>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-sm float-right" [disabled]="!addInstanceForm.valid" ><i class="far fa-save"></i> Instances </button>
+        </form>
+
+
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary btn-sm">Save changes</button>
       </div>
     </div>
   </div>

@@ -1,11 +1,13 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { Provider } from './../../../interfaces/provider';
-import { catchError } from 'rxjs/operators';
+import { catchError, tap } from 'rxjs/operators';
 import { AccountsService } from './../../../services/accounts/accounts.service';
 import { ToastrService } from 'ngx-toastr';
 import { Account } from '../../../interfaces/account';
 import { InstanceService } from './../../../services/instances/instance.service';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { InstanceDB } from './../../../interfaces/instance';
 
 declare var $ ;
 
@@ -21,6 +23,42 @@ export class DigitaloceanComponent implements OnInit {
   $instances:Observable<any>;
   accountId: number = -1;
 
+  regions = [
+    { name: "New York 1"      , slug: "nyc1" },
+    { name: "San Francisco 1" , slug: "sfo1" },
+    { name: "Amsterdam 2"     , slug: "ams2" },
+    { name: "Singapore 1"     , slug: "sgp1" },
+    { name: "London 1"        , slug: "lon1" },
+    { name: "New York 3"      , slug: "nyc3" },
+    { name: "Amsterdam 3"     , slug: "ams3" },
+    { name: "Frankfurt 1"     , slug: "fra1" },
+    { name: "Toronto 1"       , slug: "tor1" },
+    { name: "San Francisco 2" , slug: "sfo2" },
+    { name: "Bangalore 1"     , slug: "blr1" },
+    { name: "San Francisco 3" , slug: "sfo3" }
+  ];
+
+  addInstanceForm = new FormGroup({
+
+    name: new FormControl(null),
+    vmtaDomain:  new FormControl(null , [Validators.required ,  Validators.pattern("[a-zA-Z0-9$\.{1}]{1}[a-zA-Z0-9$\.?]+")]),
+    numberInstances:  new FormControl(null),
+    region:  new FormControl(1)
+  });
+
+  instanceForm = new FormGroup({
+    id: new FormControl(null) ,
+    instanceId: new FormControl(null),
+    name: new FormControl(null),
+    vmtaDomain:  new FormControl(null , [Validators.required ,  Validators.pattern("[a-zA-Z0-9$\.{1}]{1}[a-zA-Z0-9$\.?]+")]),
+    mainIp:  new FormControl(null),
+    isInstalled:  new FormControl(null),
+    isDeleted:  new FormControl(null),
+    createdAt:  new FormControl(null),
+    deletedAt:  new FormControl(null),
+    ipStatus :  new FormControl(null),
+  });
+
 
   constructor(
     private accountService: AccountsService ,
@@ -29,12 +67,11 @@ export class DigitaloceanComponent implements OnInit {
     ) { }
 
   ngOnInit(): void {
-   // console.log( this.provider.accounts );
     this.loadAccounts();
   }
 
 
-  loadAccounts( ):void{
+  loadAccounts(): void{
     this.$acconts = this.accountService.getAccount( this.provider.id ).pipe(
       catchError( err => {
         this.showError( err.error )
@@ -42,28 +79,74 @@ export class DigitaloceanComponent implements OnInit {
       })
     )
   }
-  showError( err ):void {
+  showSuccess( instance: InstanceDB , message ): void {
+    this.toastr.success( instance.name , message  );
+  }
+
+  showError( err ): void {
     this.toastr.error( err.message , err.error );
   }
 
-  getServers( ){
+  getServers(){
 
-    this.$instances = this.instanceService.getInstances(this.accountId)//.subscribe(e => console.log( e ))
-
-    this.$instances.subscribe(e => console.log( e ))
-
-    console.log( this.accountId )
+    this.$instances = this.instanceService.getInstances(this.accountId)
 
   }
 
-  addInstances(){
+  addInstancesShowModal(){
     $("#addInstance").modal('show')
   }
 
+  addInstance(){
+
+    this.instanceService.addInstance( this.addInstanceForm.value , this.accountId )
+      .subscribe( (instances: any[]) =>  {
+        $("#addInstance").modal('hide');
+        this.getServers( );
+        instances.map( instance => this.showSuccess( instance , "Instance Added" ) )
+      }  , err => this.showError( err.error ) )
+  }
+
+  updateVmta(){
+
+    this.instanceService.updateVmta( this.instanceForm.value )
+                        .subscribe((instance : InstanceDB) => {
+                          $("#editVmta").modal('hide');
+                          this.getServers( );
+                          this.showSuccess( instance , "Instance updated" )
+                        }  , err => this.showError( err.error ) )
+
+
+  }
+
   editVmta(instance){
-      console.log( instance )
+
+      this.instanceForm = new FormGroup({
+        id: new FormControl(null) ,
+        instanceId: new FormControl(instance.id),
+        name: new FormControl(instance.name),
+        vmtaDomain:  new FormControl(null , [Validators.required ,  Validators.pattern("[a-zA-Z0-9$\.{1}]{1}[a-zA-Z0-9$\.?]+")]),
+        mainIp:  new FormControl(instance.networks.v4[1].ip_address),
+        isInstalled:  new FormControl(null),
+        isDeleted:  new FormControl(null),
+        createdAt:  new FormControl(null),
+        deletedAt:  new FormControl(null),
+        ipStatus :  new FormControl(null),
+      })
 
       $("#editVmta").modal('show')
   }
 
+
+  deleteInstance(instance){
+
+    this.instanceService.deleteInstance( instance.id , this.accountId )
+                        .subscribe((e) => {
+                          this.getServers( );
+                          this.showSuccess( instance , "Instance Deleted" )
+                        }  , err => this.showError( err.error ) )
+
+  }
+
+   range = ( end , start = 0 ): number[] => [...Array(end - start + 1)].map((_, i) => start + i);
 }

@@ -22,6 +22,7 @@ import { AccountTwoKeysComponent } from './components/dash-accounts/forms/accoun
 import { DigitaloceanComponent } from './components/dash-instances/digitalocean/digitalocean.component';
 import { AzureComponent } from './components/dash-instances/azure/azure.component';
 import { FilterAccountsActivesPipe } from './pipes/filter-accounts-actives.pipe';
+import { VultrComponent } from './components/dash-instances/vultr/vultr.component';
 
 
 @NgModule({
@@ -43,6 +44,7 @@ import { FilterAccountsActivesPipe } from './pipes/filter-accounts-actives.pipe'
     DigitaloceanComponent,
     AzureComponent,
     FilterAccountsActivesPipe,
+    VultrComponent,
 
   ],
   imports: [

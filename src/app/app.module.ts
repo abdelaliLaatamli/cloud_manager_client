@@ -22,7 +22,7 @@ import { JwtInterceptor } from './interceptos/jwt/jwt.interceptor';
     AppComponent,
     LoginComponent,
     Page404Component,
-    HomeComponent
+    HomeComponent,
   ],
   imports: [
 

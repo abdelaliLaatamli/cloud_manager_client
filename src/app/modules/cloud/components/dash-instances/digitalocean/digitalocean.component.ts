@@ -80,6 +80,8 @@ export class DigitaloceanComponent implements OnInit {
     )
 
   }
+
+
   showSuccess( instance: InstanceDB , message ): void {
     this.toastr.success( instance.name , message  );
   }
@@ -164,8 +166,7 @@ export class DigitaloceanComponent implements OnInit {
     }
   }
 
-  stopInstance(instance):void{
-    // console.log( instance )
+  stopInstance(instance): void {
 
     this.instanceService.updateOptionInstance( instance.id , this.accountId , "stop").subscribe(
         e => {

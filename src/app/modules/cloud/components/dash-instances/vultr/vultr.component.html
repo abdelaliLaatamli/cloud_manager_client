@@ -1,0 +1,15 @@
+<div class="jumbotron py-2 mx-5">
+
+  <button class="btn btn-primary btn-sm float-right mt-1" [disabled]="accountId==-1" (click)="addInstancesShowModal()" ><i class="fas fa-plus"></i> Account</button>
+
+  <form class="form-inline">
+    <label class="my-1 mr-2  col-form-label col-form-label-sm " for="inlineFormCustomSelectPref">Accounts</label>
+    <select class="custom-select custom-select-sm my-1 mr-sm-2" id="inlineFormCustomSelectPref" [(ngModel)]="accountId" name="accountId" >
+      <option value="-1">Choose Account </option>
+      <option *ngFor="let account of ( provider.accounts | filterAccountsActives )" value="{{account.id}}" >{{ account.name }}</option>
+
+    </select>
+    <button type="submit" class="btn btn-primary btn-sm my-1" [disabled]="accountId==-1" (click)="getServers()">Get Servers</button>
+  </form>
+
+</div>

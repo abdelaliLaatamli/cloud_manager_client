@@ -31,13 +31,13 @@ export class AuthService {
   }
 
   logout(){
-    this.removeToken()
-    this.router.navigateByUrl("/")
+    this.removeToken();
+    this.router.navigateByUrl("/login");
   }
 
   removeToken(){
-    localStorage.removeItem( "token")
-    localStorage.removeItem( "userId")
+    localStorage.removeItem( "token");
+    localStorage.removeItem( "userId");
   }
 
   savetoken( token , userid ){
@@ -52,7 +52,21 @@ export class AuthService {
 
 
   getUser(){
-    return JSON.parse( atob(this.getToken().split('.')[1]));
+    if( this.getToken() ){
+      return JSON.parse( atob(this.getToken().split('.')[1]));
+    }
+    return null;
+  }
+
+
+  public isloggedIn() : boolean {
+    const user =  this.getUser();
+
+    if ( user ){
+      return user.exp > Date.now() / 1000;
+    }
+
+    return false;
   }
 
 }

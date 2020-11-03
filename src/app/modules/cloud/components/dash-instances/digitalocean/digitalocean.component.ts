@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { Provider } from './../../../interfaces/provider';
-import { catchError, tap } from 'rxjs/operators';
+import { catchError, map, tap } from 'rxjs/operators';
 import { AccountsService } from './../../../services/accounts/accounts.service';
 import { ToastrService } from 'ngx-toastr';
 import { Account } from '../../../interfaces/account';
@@ -78,6 +78,7 @@ export class DigitaloceanComponent implements OnInit {
         return throwError(err);
       })
     )
+
   }
   showSuccess( instance: InstanceDB , message ): void {
     this.toastr.success( instance.name , message  );
@@ -89,6 +90,7 @@ export class DigitaloceanComponent implements OnInit {
 
   getServers(){
     this.$instances = this.instanceService.getInstances(this.accountId)
+    //this.$instances.subscribe( e => console.log( e ) )
   }
 
   addInstancesShowModal(){
@@ -147,20 +149,43 @@ export class DigitaloceanComponent implements OnInit {
   }
 
   installServer(instance){
-    console.log( instance )
-    response = this.instanceService.installInsance( instance )
-    console.log( response )
-    response.db.subscribe((e) => {
-       console.log(e)
-    }  , err => this.showError( err.error ) )
-    // .subscribe((e) => {
-    //   this.getServers( );
-    //   this.showSuccess( instance , "Instance Deleted" )
-    // }  , err => this.showError( err.error ) )
+    // console.log( instance )
+    const response = this.instanceService.installInsance( instance )
+
+    if ( response.code === 200 ) {  this.showSuccess( instance , 'Instance installed' ); }
+    else { this.showError( {  message : response.message , error : `Faild install instance ${instance.name}`  } ); }
+
+    if ( response.db != null ){
+        response.db.subscribe((e) => {
+           //console.log(e);
+           this.getServers( );
+           this.showSuccess( instance , ' installation Status Saved' );
+        }  , err => this.showError( err.error ) );
+    }
   }
 
-  configInstnce(instance){
+  stopInstance(instance):void{
     // console.log( instance )
+
+    this.instanceService.updateOptionInstance( instance.id , this.accountId , "stop").subscribe(
+        e => {
+          this.getServers( );
+          this.showSuccess( instance , ' Instance stoping' );
+        } ,
+        err => this.showError( err.error )
+    )
+
+  }
+
+  startInstance(instance){
+
+    this.instanceService.updateOptionInstance( instance.id , this.accountId , "start").subscribe(
+      e => {
+        this.getServers( );
+        this.showSuccess( instance , ' Instance starting' );
+      } ,
+      err => this.showError( err.error )
+  );
 
   }
 

@@ -83,4 +83,11 @@ export class InstanceService {
 
   }
 
+  updateOptionInstance( instanceId , accountId , operation ):Observable<any>{
+
+    let base = this.http.put<InstanceDB>(`${environment.apiUrl}/instances/options/${accountId}/${instanceId}/${operation}` , {});
+    return base ;
+
+  }
+
 }

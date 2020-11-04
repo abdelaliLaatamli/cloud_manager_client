@@ -156,16 +156,25 @@ export class DigitaloceanComponent implements OnInit {
 
   }
 
-  installServer(instance){
-    // console.log( instance )
-    const response = this.instanceService.installInsance( instance )
+  installServer( instance ): void {
+
+    const instanceRequest: InstanceDB = {
+
+      instanceId  : instance.id ,
+      name        : instance.name ,
+      vmtaDomain  : instance.database.vmtaDomain ,
+      mainIp      : instance.networks.v4[1].ip_address ,
+      isInstalled : true
+    };
+
+
+    const response = this.instanceService.installInsance( instanceRequest );
 
     if ( response.code === 200 ) {  this.showSuccess( instance , 'Instance installed' ); }
     else { this.showError( {  message : response.message , error : `Faild install instance ${instance.name}`  } ); }
 
     if ( response.db != null ){
         response.db.subscribe((e) => {
-           //console.log(e);
            this.getServers( );
            this.showSuccess( instance , ' installation Status Saved' );
         }  , err => this.showError( err.error ) );
@@ -174,19 +183,19 @@ export class DigitaloceanComponent implements OnInit {
 
   stopInstance(instance): void {
 
-    this.instanceService.updateOptionInstance( instance.id , this.accountId , "stop").subscribe(
+    this.instanceService.updateOptionInstance( instance.id , this.accountId , 'stop' ).subscribe(
         e => {
           this.getServers( );
           this.showSuccess( instance , ' Instance stoping' );
         } ,
         err => this.showError( err.error )
-    )
+    );
 
   }
 
-  startInstance(instance){
+  startInstance(instance): void{
 
-    this.instanceService.updateOptionInstance( instance.id , this.accountId , "start").subscribe(
+    this.instanceService.updateOptionInstance( instance.id , this.accountId , 'start' ).subscribe(
       e => {
         this.getServers( );
         this.showSuccess( instance , ' Instance starting' );

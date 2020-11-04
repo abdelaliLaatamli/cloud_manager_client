@@ -19,8 +19,8 @@
   <div class="col-md-12 mt-5" [ngSwitch]="currentProvider.name"  >
 
 
-    <app-digitalocean *ngSwitchCase="'Digitalocean'" [provider]="currentProvider" ></app-digitalocean>
-    <app-azure *ngSwitchCase="'Azure'" ></app-azure>
+    <app-digitalocean *ngSwitchCase="'digitalocean'" [provider]="currentProvider" ></app-digitalocean>
+    <app-azure *ngSwitchCase="'azure'" ></app-azure>
     <app-vultr *ngSwitchCase="'vultr'"  [provider]="currentProvider" ></app-vultr>
     <div *ngSwitchDefault>We didn't have Template yet for this Provider</div>
 

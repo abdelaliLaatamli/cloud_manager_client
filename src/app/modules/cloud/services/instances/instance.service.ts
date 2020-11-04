@@ -4,6 +4,7 @@ import { environment } from './../../../../../environments/environment.prod';
 import { Observable } from 'rxjs';
 import { InstanceDB } from './../../interfaces/instance';
 import { ResponseGeneratorService } from '../responseGenerator/response-generator.service';
+import { InstallationResponse } from './../../interfaces/installation-response';
 
 
 
@@ -17,35 +18,35 @@ export class InstanceService {
     private responseGeneratorService: ResponseGeneratorService
     ) { }
 
-  getInstances( accountId : number) :Observable<any>{
+  getInstances( accountId: number): Observable<any>{
 
       const base = this.http.get( `${environment.apiUrl}/instances/${accountId}` );
       return base ;
   }
 
 
-  updateVmta( vmtaUpdate : InstanceDB ) : Observable<InstanceDB>{
+  updateVmta( vmtaUpdate: InstanceDB ): Observable<InstanceDB>{
 
-      let base = this.http.put<InstanceDB>(`${environment.apiUrl}/instances/update/vmta/${vmtaUpdate.instanceId}` , vmtaUpdate);
+      const base = this.http.put<InstanceDB>(`${environment.apiUrl}/instances/update/vmta/${vmtaUpdate.instanceId}` , vmtaUpdate);
       return base ;
 
   }
 
-  addInstance( instances , accountId ){
+  addInstance( instances , accountId ): Observable<any>{
 
-      let base = this.http.post( `${environment.apiUrl}/instances/${accountId}` , instances )
+      const base = this.http.post( `${environment.apiUrl}/instances/${accountId}` , instances );
       return base ;
   }
 
-  deleteInstance( instanceId , accountId ){
+  deleteInstance( instanceId , accountId ): Observable<any> {
 
-    let base = this.http.delete( `${environment.apiUrl}/instances/${accountId}/${instanceId}` )
+    const base = this.http.delete( `${environment.apiUrl}/instances/${accountId}/${instanceId}` );
     return base ;
 
   }
 
 
-  installInsance( instance ) : { code : number , message : string , db? : Observable<InstanceDB> } {
+  installInsance( instanceRequest: InstanceDB ): InstallationResponse {
 
     // let body: any = {
 
@@ -55,36 +56,22 @@ export class InstanceService {
 
     // } ;
 
-    let response : { code : number , message : string  , db ? : Observable<InstanceDB> } = this.responseGeneratorService.generateInstalationResponse()
+    const response: InstallationResponse = this.responseGeneratorService.generateInstalationResponse();
 
-    if( response.code == 200 ){
-      let instanceRequest : InstanceDB = {
+    if ( response.code === 200 ){
+      const url = `${environment.apiUrl}/instances/update/install/${instanceRequest.instanceId}`;
+      const base = this.http.put<InstanceDB>( url , instanceRequest );
 
-        instanceId  : instance.id ,
-        name        : instance.name ,
-        vmtaDomain  : instance.database.vmtaDomain ,
-        mainIp      : instance.networks.v4[1].ip_address ,
-        isInstalled : true
-      }
-
-      let base = this.http.put<InstanceDB>(`${environment.apiUrl}/instances/update/install/${instance.id}` , instanceRequest );
-
-      response.db = base
+      response.db = base;
 
     }
 
-    return response
-    // console.log( `${environment.apiUrl}/instances/update/install/${instance.id}` )
-
-    // if( response.code == 200 )
-      //let base = this.http.put<InstanceDB>(`${environment.apiUrl}/instances/update/vmta/${instance.id}` , vmtaUpdate);
-    // return base ;
-
+    return response;
   }
 
-  updateOptionInstance( instanceId , accountId , operation ):Observable<any>{
+  updateOptionInstance( instanceId , accountId , operation ): Observable<any>{
 
-    let base = this.http.put<InstanceDB>(`${environment.apiUrl}/instances/options/${accountId}/${instanceId}/${operation}` , {});
+    const base = this.http.put<InstanceDB>(`${environment.apiUrl}/instances/options/${accountId}/${instanceId}/${operation}` , {});
     return base ;
 
   }

@@ -17,13 +17,13 @@ declare var $ ;
 export class VultrComponent implements OnInit {
 
   @Input() provider: Provider;
-  $accounts: Observable<Account>;
+  $accounts;
   $instances: Observable<any>;
   accountId = -1;
 
   addInstanceForm = new FormGroup({
     name: new FormControl(null),
-    vmtaDomain:  new FormControl(null , [Validators.required ,  Validators.pattern("[a-zA-Z0-9$\.{1}]{1}[a-zA-Z0-9$\.?]+")]),
+    vmtaDomain:  new FormControl(null , [Validators.required ,  Validators.pattern('[a-zA-Z0-9$\.{1}]{1}[a-zA-Z0-9$\.?]+')]),
     numberInstances:  new FormControl(null),
     region:  new FormControl(1)
   });
@@ -33,7 +33,7 @@ export class VultrComponent implements OnInit {
     id: new FormControl(null) ,
     instanceId: new FormControl(null),
     name: new FormControl(null),
-    vmtaDomain:  new FormControl(null , [Validators.required ,  Validators.pattern("[a-zA-Z0-9$\.{1}]{1}[a-zA-Z0-9$\.?]+")]),
+    vmtaDomain:  new FormControl(null , [Validators.required ,  Validators.pattern('[a-zA-Z0-9$\.{1}]{1}[a-zA-Z0-9$\.?]+')]),
     mainIp:  new FormControl(null),
     isInstalled:  new FormControl(null),
     isDeleted:  new FormControl(null),
@@ -44,21 +44,23 @@ export class VultrComponent implements OnInit {
 
   regions = [
 
-    { name: "US New Jersey"      , slug: "1"  },
-    { name: "US Chicago"         , slug: "2"  },
-    { name: "US Dallas"          , slug: "3"  },
-    { name: "US Seattle"         , slug: "4"  },
-    { name: "US Los Angeles"     , slug: "5"  },
-    { name: "US Atlanta"         , slug: "6"  },
-    { name: "NL Amsterdam"       , slug: "7"  },
-    { name: "UK London"          , slug: "8"  },
-    { name: "DE Frankfurt"       , slug: "9"  },
-    { name: "US Silicon Valley"  , slug: "12" },
-    { name: "CA Toronto"         , slug: "22" },
-    { name: "FR Paris"           , slug: "24" },
-    { name: "JP Tokio"           , slug: "25" },
-    { name: "US Miami"           , slug: "39" },
-    { name: "SG Singapore"       , slug: "40" },
+    { slug : 'ams' , name : 'NL Amsterdam'      },
+    { slug : 'atl' , name : 'US Atlanta'        },
+    { slug : 'cdg' , name : 'FR Paris'          },
+    { slug : 'dfw' , name : 'US Dallas'         },
+    { slug : 'ewr' , name : 'US New Jersey'     },
+    { slug : 'fra' , name : 'DE Frankfurt'      },
+    { slug : 'icn' , name : 'KR Seoul'          },
+    { slug : 'lax' , name : 'US Los Angeles'    },
+    { slug : 'lhr' , name : 'UK London'         },
+    { slug : 'mia' , name : 'US Miami'          },
+    { slug : 'nrt' , name : 'JP Tokyo'          },
+    { slug : 'ord' , name : 'US Chicago'        },
+    { slug : 'sea' , name : 'US Seattle'        },
+    { slug : 'sgp' , name : 'SG Singapore'      },
+    { slug : 'sjc' , name : 'US Silicon Valley' },
+    { slug : 'syd' , name : 'AU Sydney'          },
+    { slug : 'yto' , name : 'CA Toronto'         }
 
   ];
 
@@ -77,7 +79,7 @@ export class VultrComponent implements OnInit {
     this.$accounts = this.accountsService.getAccount( this.provider.id ).pipe(
       map( e => console.log( e ) ) ,
       catchError( err => {
-        this.showError( err.error )
+        this.showError( err.error );
         return throwError(err);
       })
     )
@@ -92,20 +94,20 @@ export class VultrComponent implements OnInit {
     this.$instances = this.instanceService.getInstances(this.accountId)
                             .pipe(
                               catchError( err => {
-                                this.showError( err.error )
+                                this.showError( err.error );
                                 return throwError(err);
                               })
-                            )
+                            );
     this.$instances.subscribe( e => console.log( e ) )
   }
 
-  addInstancesShowModal(){
-    $("#addInstance").modal('show')
+  addInstancesShowModal(): void{
+    $('#addInstance').modal('show');
   }
 
 
 
-  editVmta(instance){
+  editVmta(instance): void {
 
     this.instanceForm = new FormGroup({
       id: new FormControl(null) ,
@@ -118,37 +120,100 @@ export class VultrComponent implements OnInit {
       createdAt:  new FormControl(null),
       deletedAt:  new FormControl(null),
       ipStatus :  new FormControl(null),
-    })
+    });
 
-    $("#editVmta").modal('show')
+    $('#editVmta').modal('show');
   }
 
-  updateVmta(){
+  updateVmta(): void{
 
     this.instanceService.updateVmta( this.instanceForm.value )
-                        .subscribe((instance : InstanceDB) => {
-                          $("#editVmta").modal('hide');
+                        .subscribe((instance) => {
+                          $('#editVmta').modal('hide');
                           this.getServers( );
-                          this.showSuccess( instance , "Instance updated" )
-                        }  , err => this.showError( err.error ) )
+                          this.showSuccess( instance.name , 'Instance updated' );
+                        }  , err => this.showError( err.error ) );
 
 
   }
 
-  addInstance(){
+  addInstance(): void{
 
     this.instanceService.addInstance( this.addInstanceForm.value , this.accountId )
       .subscribe( (instances: any[]) =>  {
-        $("#addInstance").modal('hide');
+        $('#addInstance').modal('hide');
         this.getServers( );
-        //instances.map( instance => this.showSuccess( instance , "Instance Added" ) )
-      }  , err => this.showError( err.error ) )
+        instances.map( instance => this.showSuccess( instance.label , 'Instance Added' ) );
+      }  , err => this.showError( err.error ) );
   }
 
 
 
-  showSuccess( instance: InstanceDB , message ): void {
-    this.toastr.success( instance.name , message  );
+  showSuccess( instance: string , message ): void {
+    this.toastr.success( instance , message  );
+  }
+
+
+  deleteInstance(instance): void{
+
+
+    this.instanceService.deleteInstance( instance.id , this.accountId )
+                        .subscribe((e) => {
+                          this.getServers( );
+                          this.showSuccess( instance.label , 'Instance Deleted' );
+                        }  , err => this.showError( err.error ) );
+
+  }
+
+  stopInstance(instance): void {
+
+    this.instanceService.updateOptionInstance( instance.id , this.accountId , 'stop' ).subscribe(
+        e => {
+          this.getServers( );
+          this.showSuccess( instance.label , 'Instance stoping' );
+        } ,
+        err => this.showError( err.error )
+    );
+
+  }
+
+  startInstance(instance): void{
+
+    this.instanceService.updateOptionInstance( instance.id , this.accountId , 'start' ).subscribe(
+      e => {
+        this.getServers( );
+        this.showSuccess( instance.label , 'Instance starting' );
+      } ,
+      err => this.showError( err.error )
+  );
+
+  }
+
+
+
+  installServer(instance): void {
+
+    const instanceRequest: InstanceDB = {
+
+      instanceId  : instance.id ,
+      name        : instance.label ,
+      vmtaDomain  : instance.database.vmtaDomain ,
+      mainIp      : instance.main_ip ,
+      isInstalled : true
+    };
+
+    const response = this.instanceService.installInsance( instanceRequest );
+
+
+    if ( response.code === 200 ) {  this.showSuccess( instance.label  , 'Instance installed' ); }
+    else { this.showError( {  message : response.message , error : `Faild install instance ${instance.name}`  } ); }
+
+    if ( response.db != null ){
+        response.db.subscribe((e) => {
+           this.getServers( );
+           this.showSuccess( instance.label  , ' installation Status Saved' );
+        }  , err => this.showError( err.error ) );
+    }
   }
 
 

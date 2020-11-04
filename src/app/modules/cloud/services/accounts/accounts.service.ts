@@ -12,10 +12,8 @@ export class AccountsService {
 
   constructor( private http : HttpClient) { }
 
-  getAccount( accountId ) : Observable<Account>{
-
-    let base = this.http.get<Account>(`${environment.apiUrl}/accounts/provider/${accountId}`);
-
+  getAccount( accountId ): Observable<Account>{
+    const base = this.http.get<Account>(`${environment.apiUrl}/accounts/provider/${accountId}`);
     return base ;
   }
 

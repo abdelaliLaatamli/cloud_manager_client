@@ -13,3 +13,149 @@
   </form>
 
 </div>
+
+
+<div class="row">
+
+  <div class="col-md-12">
+
+    <table class="table">
+      <thead class="thead-dark">
+        <tr>
+          <th scope="col" class="text-center" >#</th>
+          <th scope="col" class="text-center" >Name</th>
+          <th scope="col" class="text-center" >Region</th>
+          <th scope="col" class="text-center" >Size</th>
+          <th scope="col" class="text-center" >Public Ip</th>
+          <th scope="col" class="text-center" >Vmta Dns</th>
+          <th scope="col" class="text-center" >Status</th>
+          <th scope="col" class="text-center" >Install</th>
+          <th scope="col" class="text-center" >Delete</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let instance of $instances|async" >
+          <th scope="row" class="text-center" > <input class="form-check-input" type="checkbox" value="" id="defaultCheck1"> </th>
+          <td class="text-center" > {{ instance.label }} </td>
+          <td class="text-center" > {{ instance.region }} </td>
+          <td class="text-center" > {{ instance.plan }} </td>
+          <td class="text-center" > {{ instance.main_ip }} </td>
+          <td class="text-center"  [ngSwitch]="instance.database!=null && instance.database.vmtaDomain!=null" >
+            <div  *ngSwitchCase="true"  > {{ instance.database.vmtaDomain }} </div>
+            <div  *ngSwitchCase="false" >
+                <i class="far fa-times-circle text-danger"></i>
+                <button class="btn btn-warning btn-sm ml-3" (click)="editVmta(instance)">
+                  <i class="far fa-edit"></i>
+                </button>
+              </div>
+          </td>
+
+          <td class="text-center" [ngSwitch]="instance.status" >
+            <div *ngSwitchCase="'running'" > <button class="btn btn-warning btn-sm" (click)="stopInstance(instance)"><i class="fas fa-power-off"></i></button> {{ instance.status }} </div>
+            <div *ngSwitchCase="'stopped'"   >  <button class="btn btn-info btn-sm" (click)="startInstance(instance)"><i class="far fa-play-circle"></i></button> {{ instance.status }} </div>
+            <div *ngSwitchDefault>  {{ instance.status }} </div>
+          </td>
+
+          <td class="text-center"  [ngSwitch]="instance.database.installed" >
+            <button *ngSwitchCase="false" class="btn btn-primary btn-sm mr-1" (click)="installServer(instance)" > install </button>
+            <i *ngSwitchCase="true" class="far fa-check-circle text-success"></i>
+            <i *ngSwitchDefault class="far fa-times-circle text-danger"></i>
+          </td>
+          <td class="text-center" > <button class="btn btn-danger btn-sm" > <i class="fas fa-trash"></i> </button> </td>
+        </tr>
+      </tbody>
+    </table>
+
+
+  </div>
+
+</div>
+
+
+<div class="modal fade" id="editVmta" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Update Vmta</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+        <form [formGroup]="instanceForm" (ngSubmit)="updateVmta()" >
+          <div class="form-group">
+            <label for="exampleInputEmail1">Vmta Domain</label>
+            <input type="text" formControlName="vmtaDomain" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter Vmta domain">
+          </div>
+          <button type="submit" class="btn btn-primary btn-sm float-right" [disabled]="!instanceForm.valid" ><i class="far fa-save"></i> Vmta </button>
+        </form>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="addInstance" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Add instances</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+        <form [formGroup]="addInstanceForm" (ngSubmit)="addInstance()" >
+
+          <div class="form-row">
+
+            <div class="form-group col-md-4">
+              <label class="col-form-label col-form-label-sm" for="region">Region</label>
+              <select id="inputState" class="form-control form-control-sm" formControlName="region">
+                <option *ngFor="let region of regions" value="{{region.slug}}" > {{region.name}} </option>
+              </select>
+            </div>
+
+            <div class="form-group col-md-8">
+              <label class="col-form-label col-form-label-sm" for="name">Name</label>
+              <input type="text" class="form-control form-control-sm" id="name" formControlName="name" >
+            </div>
+
+          </div>
+
+          <div class="form-row">
+            <div class="form-group col-md-8">
+              <label class="col-form-label col-form-label-sm" for="vmta">Vmta Domain</label>
+              <input type="text" class="form-control form-control-sm" id="vmta" formControlName="vmtaDomain" >
+            </div>
+            <div class="form-group col-md-4">
+              <label class="col-form-label col-form-label-sm " for="instances" >N° Instances</label>
+              <select id="instances" class="form-control form-control-sm" formControlName="numberInstances">
+                <option *ngFor="let item of range(10 , 1)" [value]="item" >{{item}}</option>
+              </select>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-sm float-right" [disabled]="!addInstanceForm.valid" ><i class="far fa-save"></i> Instances </button>
+        </form>
+
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<ng-template #elementNotExistyet>
+  <td class="text-center" > <i class="far fa-times-circle text-danger"></i> </td>
+</ng-template>

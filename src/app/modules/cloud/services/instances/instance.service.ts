@@ -19,9 +19,8 @@ export class InstanceService {
 
   getInstances( accountId : number) :Observable<any>{
 
-      let base = this.http.get( `${environment.apiUrl}/instances/${accountId}` );
+      const base = this.http.get( `${environment.apiUrl}/instances/${accountId}` );
       return base ;
-
   }
 
 

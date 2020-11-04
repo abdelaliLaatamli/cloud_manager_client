@@ -39,7 +39,6 @@ export class DigitaloceanComponent implements OnInit {
   ];
 
   addInstanceForm = new FormGroup({
-
     name: new FormControl(null),
     vmtaDomain:  new FormControl(null , [Validators.required ,  Validators.pattern("[a-zA-Z0-9$\.{1}]{1}[a-zA-Z0-9$\.?]+")]),
     numberInstances:  new FormControl(null),
@@ -92,6 +91,13 @@ export class DigitaloceanComponent implements OnInit {
 
   getServers(){
     this.$instances = this.instanceService.getInstances(this.accountId)
+                                          .pipe(
+                                            catchError( err => {
+                                              this.showError( err.error )
+                                              return throwError(err);
+                                            })
+                                          )
+
     //this.$instances.subscribe( e => console.log( e ) )
   }
 

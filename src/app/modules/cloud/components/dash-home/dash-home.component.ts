@@ -34,6 +34,7 @@ export class DashHomeComponent implements OnInit {
   public chartOptions: Partial<ChartOptions>;
   dataChart$: Observable<Array<any[]>>;
   dataProgress$: Observable<Array<any[]>>;
+  dataTableInstances$: Observable<any>;
 
 
   constructor( private http: HttpClient ) {
@@ -44,6 +45,7 @@ export class DashHomeComponent implements OnInit {
 
     this.loadChartDataFromBackend();
     this.loadBarDataFromBackEnd();
+    this.loadInstanceTableDataFromBackEnd();
   }
 
   private async loadData() {
@@ -90,8 +92,8 @@ export class DashHomeComponent implements OnInit {
       "-primary" ,
       "-success" ,
       "-info" ,
-      "-danger" ,
       "-warning" ,
+      "-danger" ,
       "-secondary" ,
       "-dark" ,
     ];
@@ -99,15 +101,21 @@ export class DashHomeComponent implements OnInit {
     return caraceterstique + classes[index];
   }
 
-loadBarDataFromBackEnd(){
-  this.dataProgress$ = this.http.get<Array<any[]>>( `${environment.apiUrl}/home/numberAccounts` )
-  /*.pipe(
+loadBarDataFromBackEnd(): void{
+  this.dataProgress$ = this.http.get<Array<any[]>>( `${environment.apiUrl}/home/numberAccounts` );
+}
+
+
+loadInstanceTableDataFromBackEnd():void{
+  this.dataTableInstances$ = this.http.get<Array<any[]>>( `${environment.apiUrl}/home/instancesByAccount` )
+  .pipe(
     map( (datas: Array<any[]>) => {
       console.log( datas )
       return datas;
     } )
-  );*/
+  );
 }
+
 
 calculePercent(dataProgress: any[] , dataProgresses: any[][]): string {
 
@@ -116,6 +124,12 @@ calculePercent(dataProgress: any[] , dataProgresses: any[][]): string {
   return `width: ${Math.round(dataProgress[0] / sum * 100)}%`;
 }
 
+
+calculePercentNumber( dataProgress: any[] , dataProgresses: any[][] ):number{
+  let sum: number = 0 ;
+  dataProgresses.map( item => sum += item[0] );
+  return Math.round(dataProgress[0] / sum * 100);
+}
   public generateData(baseval, count, yrange) {
     let i = 0;
     let series = [];

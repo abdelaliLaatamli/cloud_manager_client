@@ -84,19 +84,38 @@ export class DashHomeComponent implements OnInit {
   }
 
 
+  getClass( caraceterstique : string , index: number ) : string {
+
+    const classes:string[] = [
+      "-primary" ,
+      "-success" ,
+      "-info" ,
+      "-danger" ,
+      "-warning" ,
+      "-secondary" ,
+      "-dark" ,
+    ];
+
+    return caraceterstique + classes[index];
+  }
+
 loadBarDataFromBackEnd(){
-  // console.log( "load" )
-
-  this.dataProgress$ = this.http.get<Array<any[]>>( `${environment.apiUrl}/home/numberAccounts` ).pipe(
+  this.dataProgress$ = this.http.get<Array<any[]>>( `${environment.apiUrl}/home/numberAccounts` )
+  /*.pipe(
     map( (datas: Array<any[]>) => {
-
-      // this.chartOptions.series[0].data = datas.map( item => item[0] );
-      // this.chartOptions.xaxis.categories = datas.map( item => item[1] );
       console.log( datas )
       return datas;
     } )
-  );
+  );*/
 }
+
+calculePercent(dataProgress: any[] , dataProgresses: any[][]): string {
+
+  let sum: number = 0 ;
+  dataProgresses.map( item => sum += item[0] );
+  return `width: ${Math.round(dataProgress[0] / sum * 100)}%`;
+}
+
   public generateData(baseval, count, yrange) {
     let i = 0;
     let series = [];

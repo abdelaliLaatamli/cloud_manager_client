@@ -10,6 +10,7 @@ import { Page404Component } from './components/page404/page404.component';
 
 import { ReactiveFormsModule ,FormsModule } from "@angular/forms";
 import { ToastrModule } from 'ngx-toastr';
+import { NgApexchartsModule } from "ng-apexcharts";
 
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { HomeComponent } from './components/dash/home/home.component';
@@ -31,6 +32,7 @@ import { JwtInterceptor } from './interceptos/jwt/jwt.interceptor';
     FormsModule,
     HttpClientModule,
     AppRoutingModule ,
+    NgApexchartsModule,
     BrowserAnimationsModule,
     ToastrModule.forRoot(),
   ],

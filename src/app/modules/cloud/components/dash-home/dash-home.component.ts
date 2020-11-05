@@ -1,4 +1,27 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit , ViewChild } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+
+import {
+  ChartComponent,
+  ApexAxisChartSeries,
+  ApexChart,
+  ApexXAxis,
+  ApexDataLabels,
+  ApexTooltip,
+  ApexStroke
+} from "ng-apexcharts";
+import { environment } from 'src/environments/environment.prod';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+
+export type ChartOptions = {
+  series: ApexAxisChartSeries;
+  chart: ApexChart;
+  xaxis: ApexXAxis;
+  stroke: ApexStroke;
+  tooltip: ApexTooltip;
+  dataLabels: ApexDataLabels;
+};
 
 @Component({
   selector: 'app-dash-home',
@@ -7,9 +30,86 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DashHomeComponent implements OnInit {
 
-  constructor() { }
+  @ViewChild("chart") chart: ChartComponent;
+  public chartOptions: Partial<ChartOptions>;
+  dataChart$: Observable<Array<any[]>>;
+  dataProgress$: Observable<Array<any[]>>;
+
+
+  constructor( private http: HttpClient ) {
+    this.loadData()
+   }
 
   ngOnInit(): void {
+
+    this.loadChartDataFromBackend();
+    this.loadBarDataFromBackEnd();
+  }
+
+  private async loadData() {
+    this.chartOptions  =  {
+      series: [
+        {
+          name: 'Instances',
+          data: []
+        }
+      ],
+      chart: {
+        height: 350,
+        type: 'area'
+      },
+      dataLabels: {
+        enabled: false
+      },
+      stroke: {
+        curve: 'smooth'
+      },
+      xaxis: { type: 'datetime',  categories: [] },
+      tooltip: { x: { format: 'dd/MM/yy HH:mm' } }
+    };
+  }
+
+  loadChartDataFromBackend(): void{
+
+    this.dataChart$ = this.http.get<Array<any[]>>( `${environment.apiUrl}/home/createdbyday` ).pipe(
+      map( (datas: Array<any[]>) => {
+
+        this.chartOptions.series[0].data = datas.map( item => item[0] );
+        this.chartOptions.xaxis.categories = datas.map( item => item[1] );
+
+        return datas;
+      } )
+    );
+
+  }
+
+
+loadBarDataFromBackEnd(){
+  // console.log( "load" )
+
+  this.dataProgress$ = this.http.get<Array<any[]>>( `${environment.apiUrl}/home/numberAccounts` ).pipe(
+    map( (datas: Array<any[]>) => {
+
+      // this.chartOptions.series[0].data = datas.map( item => item[0] );
+      // this.chartOptions.xaxis.categories = datas.map( item => item[1] );
+      console.log( datas )
+      return datas;
+    } )
+  );
+}
+  public generateData(baseval, count, yrange) {
+    let i = 0;
+    let series = [];
+    while (i < count) {
+      const x = Math.floor(Math.random() * (750 - 1 + 1)) + 1;
+      const y = Math.floor(Math.random() * (yrange.max - yrange.min + 1)) + yrange.min;
+      const z = Math.floor(Math.random() * (75 - 15 + 1)) + 15;
+
+      series.push([x, y, z]);
+      baseval += 86400000;
+      i++;
+    }
+    return series;
   }
 
 }

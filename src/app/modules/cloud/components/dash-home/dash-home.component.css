@@ -8,3 +8,9 @@
 .text-bg-progress {
   color: #e9ecef;
 }
+
+
+#chart {
+  max-width: 650px;
+  /* margin: 35px auto; */
+}

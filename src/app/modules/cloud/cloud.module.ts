@@ -1,3 +1,4 @@
+import { NgApexchartsModule } from 'ng-apexcharts';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
@@ -51,6 +52,7 @@ import { VultrComponent } from './components/dash-instances/vultr/vultr.componen
     CommonModule,
     CloudRoutingModule ,
     ReactiveFormsModule ,
+    NgApexchartsModule,
     FormsModule
   ]
 })

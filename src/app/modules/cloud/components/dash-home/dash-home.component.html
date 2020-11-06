@@ -48,14 +48,12 @@
       <div class="card-header bg-light">
         <div class="row align-items-center">
           <div class="col">
-            <h6 class="mb-0 my-2">Running Projects</h6>
+            <h6 class="mb-0 my-2">Active  Accounts</h6>
           </div>
         </div>
       </div>
-      <div class="card-body p-0">
-
-
-
+      <div class="card-body p-0" style="max-height: 240px; overflow: auto;">
+      <!-- <div class="card-body p-0"> -->
 
         <div class="row no-gutters align-items-center py-2 position-relative border-bottom border-200" *ngFor="let accoutItem of TableInstances; let i = index" >
           <div class="col pl-card py-1 position-static">
@@ -92,16 +90,21 @@
           </div>
         </div>
 
+      </div>
+      <div class="card-footer bg-light p-0" style="z-index: 1;">
+        <a class="btn btn-sm btn-link btn-block py-2" href="#!">
+          More
+        </a>
+      </div>
 
-      <div class="card-footer bg-light p-0"><a class="btn btn-sm btn-link btn-block py-2" href="#!">More<!-- <span class="fas fa-chevron-right ml-1 fs--2"></span> --></a></div>
-    </div>
 
 
   </div>
 </div>
   <div class="col-md-6">
 
-    <div id="chart" *ngIf="dataChart$ | async" >
+    <!-- <div id="chart" *ngIf="dataChart$ | async" > -->
+    <div class="pr-5 ml-3" *ngIf="dataChart$ | async" >
       <apx-chart
         [series]="chartOptions.series"
         [chart]="chartOptions.chart"
@@ -160,14 +163,9 @@
   </div>
   <div class="col-lg-6 col-xl-5 col-xxl-4 mb-3 pl-lg-2">
     <div class="card h-lg-100 pb-4">
-      <!-- <div class="bg-holder bg-card" style="background-image:url(../assets/img/illustrations/corner-1.png);"></div> -->
-      <!--/.bg-holder-->
       <div class="card-body position-relative">
         <h6 class="text-warning">Running out of your space?</h6>
         <p class="fs--1 mb-0">Your storage will be running out soon. Get more<br> space and powerful productivity features.</p>
-        <!-- <a class="btn btn-link fs--1 text-warning mt-4 mt-lg-3 pl-0" href="#!">Upgrade storage
-          <span class="fas fa-chevron-right ml-1" data-fa-transform="shrink-4 down-1"></span>
-        </a> -->
       </div>
     </div>
   </div>

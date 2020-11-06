@@ -98,7 +98,7 @@ export class VultrComponent implements OnInit {
                                 return throwError(err);
                               })
                             );
-    this.$instances.subscribe( e => console.log( e ) )
+    // this.$instances.subscribe( e => console.log( e ) )
   }
 
   addInstancesShowModal(): void{

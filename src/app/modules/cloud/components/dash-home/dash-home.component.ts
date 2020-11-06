@@ -58,6 +58,7 @@ export class DashHomeComponent implements OnInit {
       ],
       chart: {
         height: 350,
+        width: '100%',
         type: 'area'
       },
       dataLabels: {
@@ -110,7 +111,7 @@ loadInstanceTableDataFromBackEnd():void{
   this.dataTableInstances$ = this.http.get<Array<any[]>>( `${environment.apiUrl}/home/instancesByAccount` )
   .pipe(
     map( (datas: Array<any[]>) => {
-      console.log( datas )
+      // console.log( datas )
       return datas;
     } )
   );

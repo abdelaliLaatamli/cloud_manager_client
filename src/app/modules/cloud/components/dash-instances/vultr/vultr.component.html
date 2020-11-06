@@ -51,9 +51,9 @@
           </td>
 
           <td class="text-center" [ngSwitch]="instance.power_status" >
-            <div *ngSwitchCase="'running'" > <button class="btn btn-warning btn-sm" (click)="stopInstance(instance)"><i class="fas fa-power-off"></i></button> {{ instance.status }} </div>
-            <div *ngSwitchCase="'stopped'"   >  <button class="btn btn-info btn-sm" (click)="startInstance(instance)"><i class="far fa-play-circle"></i></button> {{ instance.status }} </div>
-            <div *ngSwitchDefault>  {{ instance.status }} </div>
+            <div *ngSwitchCase="'running'" > <button class="btn btn-warning btn-sm" (click)="stopInstance(instance)"><i class="fas fa-power-off"></i></button> {{ instance.power_status }} </div>
+            <div *ngSwitchCase="'stopped'"   >  <button class="btn btn-info btn-sm" (click)="startInstance(instance)"><i class="far fa-play-circle"></i></button> {{ instance.power_status }} </div>
+            <div *ngSwitchDefault>  {{ instance.power_status }} </div>
           </td>
 
           <td class="text-center"  [ngSwitch]="instance.database.installed" >

@@ -6,7 +6,7 @@
     <label class="my-1 mr-2  col-form-label col-form-label-sm " for="inlineFormCustomSelectPref">Accounts</label>
     <select class="custom-select custom-select-sm my-1 mr-sm-2" id="inlineFormCustomSelectPref" [(ngModel)]="accountId" name="accountId" >
       <option value="-1">Choose Account </option>
-      <option *ngFor="let account of ( provider.accounts | filterAccountsActives )" value="{{account.id}}" >{{ account.name }}</option>
+      <option *ngFor="let account of $acconts | async;filterAccountsActives" value="{{account.id}}" >{{ account.name }}</option>
 
     </select>
     <button type="submit" class="btn btn-primary btn-sm my-1" [disabled]="accountId==-1" (click)="getServers()">Get Servers</button>

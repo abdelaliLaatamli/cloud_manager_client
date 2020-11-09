@@ -17,7 +17,7 @@ declare var $ ;
 export class VultrComponent implements OnInit {
 
   @Input() provider: Provider;
-  $accounts;
+  accounts$;
   $instances: Observable<any>;
   accountId = -1;
 
@@ -70,14 +70,15 @@ export class VultrComponent implements OnInit {
     private toastr: ToastrService ) { }
 
   ngOnInit(): void {
+      // console.log( this.provider);
       this.loadAccounts();
   }
 
 
   loadAccounts(): void{
 
-    this.$accounts = this.accountsService.getAccount( this.provider.id ).pipe(
-      map( e => console.log( e ) ) ,
+    this.accounts$ = this.accountsService.getAccount( this.provider.id ).pipe(
+    // map( e => {console.log( e ); return e;}) ,
       catchError( err => {
         this.showError( err.error );
         return throwError(err);
@@ -93,6 +94,7 @@ export class VultrComponent implements OnInit {
   getServers(){
     this.$instances = this.instanceService.getInstances(this.accountId)
                             .pipe(
+                             // map( e => console.log( e ) ) ,
                               catchError( err => {
                                 this.showError( err.error );
                                 return throwError(err);

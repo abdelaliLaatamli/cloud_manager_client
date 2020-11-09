@@ -1,1 +1,35 @@
-<p>dash-stats works!</p>
+<h4>Statistiques</h4>
+
+<div class="row mt-5">
+
+  <div class="col-md-8">
+    <div class="card p-4">
+    <apx-chart
+    [series]="chartOptionsColumn.series"
+    [chart]="chartOptionsColumn.chart"
+    [dataLabels]="chartOptionsColumn.dataLabels"
+    [plotOptions]="chartOptionsColumn.plotOptions"
+    [yaxis]="chartOptionsColumn.yaxis"
+    [legend]="chartOptionsColumn.legend"
+    [fill]="chartOptionsColumn.fill"
+    [stroke]="chartOptionsColumn.stroke"
+    [tooltip]="chartOptionsColumn.tooltip"
+    [xaxis]="chartOptionsColumn.xaxis"
+  ></apx-chart>
+</div>
+
+  </div>
+  <div class="col-md-4" >
+    <div class="card" >
+    <div id="chart-donut">
+      <apx-chart
+        [series]="chartOptionsDonut.series"
+        [chart]="chartOptionsDonut.chart"
+        [labels]="chartOptionsDonut.labels"
+        [responsive]="chartOptionsDonut.responsive"
+      ></apx-chart>
+    </div>
+  </div>
+  </div>
+
+</div>

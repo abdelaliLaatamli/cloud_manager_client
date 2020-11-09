@@ -5,37 +5,37 @@
   <div class="col-6 col-md-2 pr-0 ">
       <div class="bg-primary rounded px-3 py-2 mb-1 text-white clearfix" >
         <h6 class="sm-font" >Provider Of month </h6>
-        <span class="float-right"> 25%</span>
+        <span class="float-right" *ngIf="dataNavs$ | async as dataNavs" > {{ dataNavs.providerOfMonth | titlecase }}</span>
       </div>
   </div>
   <div class="col-6 col-md-2 pr-0">
       <div class="bg-success rounded px-3 py-2 mb-1 text-white clearfix" >
         <h6 class="sm-font"> Instances </h6>
-        <span class="float-right"> 25%</span>
+        <span class="float-right" *ngIf="dataNavs$ | async as dataNavs" > {{ dataNavs.numberInstancesOfMonth }} </span>
       </div>
   </div>
   <div class="col-6 col-md-2 pr-0">
     <div class="bg-danger  rounded px-3 py-2  mb-1 text-white clearfix" >
       <h6 class="sm-font" > Accounts </h6>
-      <span class="float-right"> 25%</span>
+      <span class="float-right" *ngIf="dataNavs$ | async as dataNavs" > {{ dataNavs.numberAccountsOfEntity }} </span>
     </div>
   </div>
   <div class="col-6 col-md-2 pr-0">
     <div class="bg-info    rounded px-3 py-2 mb-1  text-white clearfix" >
       <h6 class="sm-font" > Providers </h6>
-      <span class="float-right"> 25%</span>
+      <span class="float-right" *ngIf="dataNavs$ | async as dataNavs" > {{ dataNavs.numberOfProvidersOfEntity }} </span>
     </div>
   </div>
   <div class="col-6 col-md-2 pr-0">
     <div class="bg-warning rounded px-3 py-2 mb-1 text-white clearfix" >
       <h6 class="sm-font" > Tasks </h6>
-      <span class="float-right"> 25%</span>
+      <span class="float-right" *ngIf="dataNavs$ | async as dataNavs"> {{ dataNavs.numberOfTasks }}</span>
     </div>
   </div>
   <div class="col-6 col-md-2 pr-0">
     <div class="bg-secondary rounded px-3 py-2 mb-1 text-white clearfix" >
       <h6 class="sm-font" > Users </h6>
-      <span class="float-right"> 25%</span>
+      <span class="float-right" *ngIf="dataNavs$ | async as dataNavs">  {{ dataNavs.numberOfUsersOfEntity }} </span>
     </div>
   </div>
 

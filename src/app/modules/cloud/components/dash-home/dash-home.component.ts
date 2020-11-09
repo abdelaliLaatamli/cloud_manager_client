@@ -35,6 +35,7 @@ export class DashHomeComponent implements OnInit {
   dataChart$: Observable<Array<any[]>>;
   dataProgress$: Observable<Array<any[]>>;
   dataTableInstances$: Observable<any>;
+  dataNavs$: Observable<any>;
 
 
   constructor( private http: HttpClient ) {
@@ -46,6 +47,7 @@ export class DashHomeComponent implements OnInit {
     this.loadChartDataFromBackend();
     this.loadBarDataFromBackEnd();
     this.loadInstanceTableDataFromBackEnd();
+    this.loadNavsDataFromBackEnd();
   }
 
   private async loadData() {
@@ -106,6 +108,10 @@ loadBarDataFromBackEnd(): void{
   this.dataProgress$ = this.http.get<Array<any[]>>( `${environment.apiUrl}/home/numberAccounts` );
 }
 
+
+loadNavsDataFromBackEnd(): void{
+  this.dataNavs$ = this.http.get<Array<any[]>>( `${environment.apiUrl}/home/topDashInfos` );
+}
 
 loadInstanceTableDataFromBackEnd():void{
   this.dataTableInstances$ = this.http.get<Array<any[]>>( `${environment.apiUrl}/home/instancesByAccount` )

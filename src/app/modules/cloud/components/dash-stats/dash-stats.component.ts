@@ -347,4 +347,6 @@ export class DashStatsComponent implements OnInit {
     };
   }
 
+  range = ( end , start = 0 ): number[] => [...Array(end - start + 1)].map((_, i) => start + i);
+
 }

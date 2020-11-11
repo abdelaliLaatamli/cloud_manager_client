@@ -1,1 +1,114 @@
-<p>dash-users works!</p>
+<h4>Users</h4>
+
+
+<div class="row">
+    <div class="col-md-10 offset-1">
+
+      <button class="btn btn-primary btn-sm float-right" (click)="showAddUserModal()"> Add user </button>
+
+    </div>
+</div>
+
+<div class="row mt-5">
+
+  <div class="col-md-10 offset-1">
+
+
+    <table class="table">
+      <thead class="thead-dark">
+        <tr>
+          <!-- <th scope="col">#</th> -->
+          <th scope="col">userName</th>
+          <th scope="col">Email</th>
+          <th scope="col">Entity</th>
+          <th scope="col">Edit</th>
+          <th scope="col">Delete</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of users$ | async " >
+          <!-- <th scope="row">s1</th> -->
+          <td>{{user.username}}</td>
+          <td>{{user.email}}</td>
+          <td>{{user.entity.name}}</td>
+          <td> <button class="btn btn-warning btn-sm">edit</button>  </td>
+          <td> <button class="btn btn-danger btn-sm">delete</button> </td>
+        </tr>
+        <!-- <tr>
+          <th scope="row">2</th>
+          <td>Jacob</td>
+          <td>Thornton</td>
+          <td>@fat</td>
+        </tr>
+        <tr>
+          <th scope="row">3</th>
+          <td>Larry</td>
+          <td>the Bird</td>
+          <td>@twitter</td>
+        </tr> -->
+      </tbody>
+    </table>
+
+  </div>
+
+
+</div>
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="add-user-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+        <form [formGroup]="formAddUser">
+
+          <div class="form-group">
+            <label for="exampleInputPassword1">Username :</label>
+            <input type="text" formControlName="username" class="form-control"
+                  [class]="{
+                    'is-valid'  : formAddUser.get('username').valid ,
+                    'is-invalid': formAddUser.get('username').touched &&
+                                  formAddUser.get('username').invalid  &&
+                                  formAddUser.get('username').dirty }">
+          </div>
+
+          <div class="form-group">
+            <label for="exampleInputEmail1">Email :</label>
+            <input type="email" formControlName="email"  class="form-control"
+                [class]="{
+                      'is-valid'  : formAddUser.get('email').valid ,
+                      'is-invalid': formAddUser.get('email').touched &&
+                                    formAddUser.get('email').invalid  &&
+                                    formAddUser.get('email').dirty }"
+                aria-describedby="emailHelp">
+          </div>
+
+          <div class="form-group">
+            <label for="exampleInputPassword1">Password</label>
+            <input type="password" formControlName="password" class="form-control"
+                  [class]="{
+                    'is-valid'  : formAddUser.get('password').valid ,
+                    'is-invalid': formAddUser.get('password').touched &&
+                                  formAddUser.get('password').invalid  &&
+                                  formAddUser.get('password').dirty }">
+          </div>
+
+
+        </form>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary btn-sm" (click)="submitForm()" [disabled]="!formAddUser.valid">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>

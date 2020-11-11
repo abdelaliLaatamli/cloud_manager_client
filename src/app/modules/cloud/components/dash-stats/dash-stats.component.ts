@@ -10,14 +10,14 @@ import {
     ApexTooltip,
     ApexXAxis,
     ApexYAxis,
-    ChartComponent
+    ChartComponent,
+    ApexNonAxisChartSeries,
+    ApexResponsive,
+    ApexChart,
+    ApexMarkers,
+    ApexGrid
  } from "ng-apexcharts";
 
-import {
-  ApexNonAxisChartSeries,
-  ApexResponsive,
-  ApexChart
-} from "ng-apexcharts";
 
 export type ChartOptionsDonut = {
   series: ApexNonAxisChartSeries;
@@ -39,6 +39,42 @@ export type ChartOptionsColumn  = {
   legend: ApexLegend;
 };
 
+export type ChartOptionsLineColumnArea = {
+  series: ApexAxisChartSeries;
+  chart: ApexChart;
+  xaxis: ApexXAxis;
+  yaxis: ApexYAxis | ApexYAxis[];
+  labels: string[];
+  stroke: any; // ApexStroke;
+  markers: ApexMarkers;
+  plotOptions: ApexPlotOptions;
+  fill: ApexFill;
+  tooltip: ApexTooltip;
+};
+
+// type ApexXAxis = {
+//   type?: "category" | "datetime" | "numeric";
+//   categories?: any;
+//   labels?: {
+//     style?: {
+//       colors?: string | string[];
+//       fontSize?: string;
+//     };
+//   };
+// };
+
+export type ChartOptionsDistributedColumns = {
+  series: ApexAxisChartSeries;
+  chart: ApexChart;
+  dataLabels: ApexDataLabels;
+  plotOptions: ApexPlotOptions;
+  yaxis: ApexYAxis;
+  xaxis: ApexXAxis;
+  grid: ApexGrid;
+  colors: string[];
+  legend: ApexLegend;
+};
+
 
 @Component({
   selector: 'app-dash-stats',
@@ -50,11 +86,15 @@ export class DashStatsComponent implements OnInit {
   @ViewChild("chart") chart: ChartComponent;
   public chartOptionsDonut: Partial<ChartOptionsDonut>;
   public chartOptionsColumn: Partial<ChartOptionsColumn>;
+  public chartOptionsLineColumnArea: Partial<ChartOptionsLineColumnArea>;
+  public chartOptionsDistributedColumns: Partial<ChartOptionsDistributedColumns>;
 
 
   constructor() {
     this.loadDonutChart();
     this.loadDonutColumn();
+    this.loadDonutLineColumnArea();
+    this.loadLineColumnArea();
   }
 
   ngOnInit(): void {
@@ -149,5 +189,162 @@ export class DashStatsComponent implements OnInit {
     };
   }
 
+
+  loadDonutLineColumnArea(): void {
+    this.chartOptionsLineColumnArea = {
+      series: [
+        {
+          name: "TEAM A",
+          type: "column",
+          data: [23, 11, 22, 27, 13, 22, 37, 21, 44, 22, 30]
+        },
+        {
+          name: "TEAM B",
+          type: "area",
+          data: [44, 55, 41, 67, 22, 43, 21, 41, 56, 27, 43]
+        },
+        {
+          name: "TEAM C",
+          type: "line",
+          data: [30, 25, 36, 30, 45, 35, 64, 52, 59, 36, 39]
+        }
+      ],
+      chart: {
+        height: 370,
+        type: "line",
+        stacked: false
+      },
+      stroke: {
+        width: [0, 2, 5],
+        curve: "smooth"
+      },
+      plotOptions: {
+        bar: {
+          columnWidth: "50%"
+        }
+      },
+
+      fill: {
+        opacity: [0.85, 0.25, 1],
+        gradient: {
+          inverseColors: false,
+          shade: "light",
+          type: "vertical",
+          opacityFrom: 0.85,
+          opacityTo: 0.55,
+          stops: [0, 100, 100, 100]
+        }
+      },
+      labels: [
+        "01/01/2003",
+        "02/01/2003",
+        "03/01/2003",
+        "04/01/2003",
+        "05/01/2003",
+        "06/01/2003",
+        "07/01/2003",
+        "08/01/2003",
+        "09/01/2003",
+        "10/01/2003",
+        "11/01/2003"
+      ],
+      markers: {
+        size: 0
+      },
+      xaxis: {
+        type: "datetime"
+      },
+      yaxis: {
+        title: {
+          text: "Points"
+        },
+        min: 0
+      },
+      tooltip: {
+        shared: true,
+        intersect: false,
+        y: {
+          formatter: function(y) {
+            if (typeof y !== "undefined") {
+              return y.toFixed(0) + " points";
+            }
+            return y;
+          }
+        }
+      }
+    };
+  }
+
+  loadLineColumnArea(): void{
+    this.chartOptionsDistributedColumns = {
+      series: [
+        {
+          name: "distibuted",
+          data: [21, 22, 10, 28, 16, 21, 13, 30]
+        }
+      ],
+      chart: {
+        height: 350,
+        type: "bar",
+        events: {
+          click: function(chart, w, e) {
+            // console.log(chart, w, e)
+          }
+        }
+      },
+      colors: [
+        "#008FFB",
+        "#00E396",
+        "#FEB019",
+        "#FF4560",
+        "#775DD0",
+        "#546E7A",
+        "#26a69a",
+        "#D10CE8"
+      ],
+      plotOptions: {
+        bar: {
+          columnWidth: "45%",
+          distributed: true
+        }
+      },
+      dataLabels: {
+        enabled: false
+      },
+      legend: {
+        show: false
+      },
+      grid: {
+        show: false
+      },
+      xaxis: {
+        categories: [
+          ["John", "Doe"],
+          ["Joe", "Smith"],
+          ["Jake", "Williams"],
+          "Amber",
+          ["Peter", "Brown"],
+          ["Mary", "Evans"],
+          ["David", "Wilson"],
+          ["Lily", "Roberts"]
+        ],
+        labels: {
+          style: {
+            colors: [
+              "#008FFB",
+              "#00E396",
+              "#FEB019",
+              "#FF4560",
+              "#775DD0",
+              "#546E7A",
+              "#26a69a",
+              "#D10CE8"
+            ],
+            fontSize: "12px"
+          }
+        }
+      }
+    };
+  }
 
 }

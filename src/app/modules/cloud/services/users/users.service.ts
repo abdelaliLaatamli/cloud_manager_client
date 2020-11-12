@@ -21,4 +21,17 @@ export class UsersService {
       return request;
   }
 
+
+  updateUser( user : any , changePassword: boolean ) : Observable<any>{
+
+    const userId= user.id;
+
+    delete user["id"]
+    // console.log( user , changePassword)
+    const request = this.http.post( (changePassword) ?
+                                      `${environment.apiUrl}/users/${userId}/pwdreset` :
+                                      `${environment.apiUrl}/users/${userId}` , user );
+    return request;
+  }
+
 }

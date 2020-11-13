@@ -1,4 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { Observable, throwError } from 'rxjs';
+import { StatsService } from '../../services/stats/stats.service';
+import { catchError, map } from 'rxjs/operators';
 
 import {
     ApexAxisChartSeries,
@@ -17,6 +20,7 @@ import {
     ApexMarkers,
     ApexGrid
  } from "ng-apexcharts";
+import { ToastrService } from 'ngx-toastr';
 
 
 export type ChartOptionsDonut = {
@@ -52,16 +56,6 @@ export type ChartOptionsLineColumnArea = {
   tooltip: ApexTooltip;
 };
 
-// type ApexXAxis = {
-//   type?: "category" | "datetime" | "numeric";
-//   categories?: any;
-//   labels?: {
-//     style?: {
-//       colors?: string | string[];
-//       fontSize?: string;
-//     };
-//   };
-// };
 
 export type ChartOptionsDistributedColumns = {
   series: ApexAxisChartSeries;
@@ -89,8 +83,10 @@ export class DashStatsComponent implements OnInit {
   public chartOptionsLineColumnArea: Partial<ChartOptionsLineColumnArea>;
   public chartOptionsDistributedColumns: Partial<ChartOptionsDistributedColumns>;
 
+  user$: Observable<any[][]>;
 
-  constructor() {
+
+  constructor( private states : StatsService , private toastr : ToastrService ) {
     this.loadDonutChart();
     this.loadDonutColumn();
     this.loadDonutLineColumnArea();
@@ -98,6 +94,24 @@ export class DashStatsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.loadusersData()
+  }
+
+  loadusersData(): void {
+    this.user$ = this.states.loadUsersData().pipe(
+      map( e => console.log( e ) ),
+      catchError( err => {
+        this.showError( err );
+        return throwError(err);
+      } )
+    );
+
+    // this.user$.subscribe( e => console.log( e ) )
+  }
+
+
+  showError( err ): void {
+    this.toastr.error( err.message , err.error );
   }
 
   loadDonutChart(): void{

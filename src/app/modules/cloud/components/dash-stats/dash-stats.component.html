@@ -35,20 +35,17 @@
               <th >User</th>
               <th >Commit</th>
               <th>Date</th>
-              <!-- <th class="actions"></th> -->
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let item of range(5)" >
+            <tr *ngFor="let item of user$ | async as user" >
               <td class="user-avatar">
                   <img src="https://avatars.dicebear.com/api/avataaars/example.svg?b=%2319b5fe"
                         width="30px" height="30px"
-                        class="rounded-circle mr-2" alt="Avatar">Penelope Thornton</td>
+                        class="rounded-circle mr-2" alt="Avatar"> {{user[0]}} </td>
 
-              <td>Topbar dropdown</td>
-              <td>A</td>
-              <!-- <td>Aug 16, 2018</td> -->
-              <!-- <td class="actions"><a class="icon" href="#"><i class="mdi mdi-github-alt"></i></a></td> -->
+              <td> {{user[1]}} </td>
+              <td> {{user[2]}} </td>
             </tr>
           </tbody>
         </table>

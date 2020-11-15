@@ -8,12 +8,25 @@ import { Observable } from 'rxjs';
 })
 export class StatsService {
 
-  constructor( private http : HttpClient ) { }
+  constructor( private http: HttpClient ) { }
 
 
-  loadUsersData(): Observable<any[][]>{
-    const request = this.http.get<any[][]>( `${environment.apiUrl}/statistiques/ofusers` );
+  loadUsersData(): Observable<any>{
+    const request = this.http.get( `${environment.apiUrl}/statistiques/ofusers` );
     return request;
   }
+
+
+  loadInstnacesOfProviderData(): Observable<any>{
+    const request = this.http.get( `${environment.apiUrl}/statistiques/numberInstances` );
+    return request;
+  }
+
+
+  loadInstnacesOfEntity(): Observable<any>{
+    const request = this.http.get( `${environment.apiUrl}/statistiques/numberInstancesofentity` );
+    return request;
+  }
+
 
 }

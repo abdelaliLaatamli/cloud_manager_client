@@ -83,10 +83,12 @@ export class DashStatsComponent implements OnInit {
   public chartOptionsLineColumnArea: Partial<ChartOptionsLineColumnArea>;
   public chartOptionsDistributedColumns: Partial<ChartOptionsDistributedColumns>;
 
-  user$: Observable<any[][]>;
+  user$: Observable<any>;
+  instancesOfProvider$: Observable<any>;
+  instancesOfEntity$: Observable<any>;
 
 
-  constructor( private states : StatsService , private toastr : ToastrService ) {
+  constructor( private states: StatsService , private toastr: ToastrService ) {
     this.loadDonutChart();
     this.loadDonutColumn();
     this.loadDonutLineColumnArea();
@@ -94,12 +96,14 @@ export class DashStatsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.loadusersData()
+    this.loadusersData();
+    this.loadInstnacesOfProviderData();
+    this.loadInstnacesOfEntity();
   }
 
   loadusersData(): void {
     this.user$ = this.states.loadUsersData().pipe(
-      map( e => console.log( e ) ),
+      // map( e => { console.log( e ); return e; }),
       catchError( err => {
         this.showError( err );
         return throwError(err);
@@ -109,6 +113,50 @@ export class DashStatsComponent implements OnInit {
     // this.user$.subscribe( e => console.log( e ) )
   }
 
+  loadInstnacesOfProviderData(): void {
+    this.instancesOfProvider$ = this.states.loadInstnacesOfProviderData().pipe(
+      map( elemts => {
+        this.chartOptionsDonut.series = elemts.map( item=> item[1] );
+        this.chartOptionsDonut.labels = elemts.map( item => item[0][0].toUpperCase() + item[0].substr(1).toLowerCase() );
+        return elemts;
+      }),
+      catchError( err => {
+        this.showError( err );
+        return throwError(err);
+      } )
+    );
+
+  }
+
+
+  loadInstnacesOfEntity(): void {
+    // {
+    //   name: "Net Profit",
+    //   data: [ 44, 55, 57, 56, 61, 58, 63, 60, 66 , 63, 60, 66 ]
+    // },
+
+    this.instancesOfEntity$ = this.states.loadInstnacesOfEntity().pipe(
+      map( elemts => {
+        // let a = {
+        //   name : "",
+        //   data : []
+        // };
+
+        // this.chartOptionsDonut.series = elemts.map( item => item[1] );
+        // this.chartOptionsDonut.labels = elemts.map( item => item[0][0].toUpperCase() + item[0].substr(1).toLowerCase() );
+
+        console.log( elemts );
+
+        return elemts;
+      }),
+      catchError( err => {
+        this.showError( err );
+        return throwError(err);
+      } )
+    );
+
+  }
+
 
   showError( err ): void {
     this.toastr.error( err.message , err.error );
@@ -116,11 +164,11 @@ export class DashStatsComponent implements OnInit {
 
   loadDonutChart(): void{
     this.chartOptionsDonut = {
-      series: [44, 55, 13, 43, 22],
+      series: [],
       chart: {
         type: "donut"
       },
-      labels: ["Team A", "Team B", "Team C", "Team D", "Team E"],
+      labels: [],
       responsive: [
         {
           breakpoint: 480,
@@ -142,15 +190,19 @@ export class DashStatsComponent implements OnInit {
       series: [
         {
           name: "Net Profit",
-          data: [44, 55, 57, 56, 61, 58, 63, 60, 66]
+          data: [ 44, 55, 57, 56, 61, 58, 63, 60, 66 , 63, 60, 66 ]
+        },
+        {
+          name: "Net Profit",
+          data: [ 44, 55, 57, 56, 61, 58, 63, 60, 66 , 63, 60, 66 ]
         },
         {
           name: "Revenue",
-          data: [76, 85, 101, 98, 87, 105, 91, 114, 94]
+          data: [ 76, 85, 101, 98, 87, 105, 91, 114, 94 , 63, 60, 66]
         },
         {
           name: "Free Cash Flow",
-          data: [35, 41, 36, 26, 45, 48, 52, 53, 41]
+          data: [ 35, 41, 36, 26, 45, 48, 52, 53, 41 , 63, 60, 66 ]
         }
       ],
       chart: {
@@ -174,6 +226,7 @@ export class DashStatsComponent implements OnInit {
       },
       xaxis: {
         categories: [
+          "Jan",
           "Feb",
           "Mar",
           "Apr",
@@ -182,7 +235,9 @@ export class DashStatsComponent implements OnInit {
           "Jul",
           "Aug",
           "Sep",
-          "Oct"
+          "Oct",
+          "Nov",
+          "Dec"
         ]
       },
       yaxis: {

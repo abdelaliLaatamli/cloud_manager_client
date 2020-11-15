@@ -38,21 +38,19 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let item of user$ | async as user" >
+            <tr *ngFor="let user of user$ | async" >
               <td class="user-avatar">
                   <img src="https://avatars.dicebear.com/api/avataaars/example.svg?b=%2319b5fe"
                         width="30px" height="30px"
                         class="rounded-circle mr-2" alt="Avatar"> {{user[0]}} </td>
 
               <td> {{user[1]}} </td>
-              <td> {{user[2]}} </td>
+              <td > <i class="fas" [ngClass]="{ 'fa-long-arrow-alt-up text-success' : user[1]>user[2] ,  'fa-long-arrow-alt-down text-danger' : user[1]<user[2] }" > </i> </td>
             </tr>
           </tbody>
         </table>
       </div>
     </div>
-
-
 
   </div>
 
@@ -63,7 +61,7 @@
 
   <div class="col-md-4">
 
-    <apx-chart
+    <apx-chart *ngIf="instancesOfEntity$ | async"
       [series]="chartOptionsColumn.series"
       [chart]="chartOptionsColumn.chart"
       [dataLabels]="chartOptionsColumn.dataLabels"
@@ -98,7 +96,7 @@
   <div class="col-md-4">
 
 
-    <div class="card" >
+    <div class="card" *ngIf="instancesOfProvider$ | async" >
       <div id="chart-donut">
         <apx-chart
           [series]="chartOptionsDonut.series"

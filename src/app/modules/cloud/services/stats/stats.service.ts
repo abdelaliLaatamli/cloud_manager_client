@@ -28,5 +28,16 @@ export class StatsService {
     return request;
   }
 
+  loadInstancesOfAccount(): Observable<Array<any[]>>{
+    const request = this.http.get<Array<any[]>>( `${environment.apiUrl}/home/instancesByAccount/8` );
+    return request ;
+  }
+
+
+  loadInstancesOfEntitiesData(): Observable<any> {
+    const request = this.http.get<any>( `${environment.apiUrl}/statistiques/stateOfEntities` );
+    return request ;
+  }
+
 
 }

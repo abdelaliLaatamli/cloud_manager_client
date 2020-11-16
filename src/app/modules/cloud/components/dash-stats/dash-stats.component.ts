@@ -86,6 +86,8 @@ export class DashStatsComponent implements OnInit {
   user$: Observable<any>;
   instancesOfProvider$: Observable<any>;
   instancesOfEntity$: Observable<any>;
+  instancesOfAccount$: Observable<any>;
+  instancesOfEntities$: Observable<any>;
 
 
   constructor( private states: StatsService , private toastr: ToastrService ) {
@@ -98,19 +100,18 @@ export class DashStatsComponent implements OnInit {
   ngOnInit(): void {
     this.loadusersData();
     this.loadInstnacesOfProviderData();
-    this.loadInstnacesOfEntity();
+    this.loadInstnacesOfEntityData();
+    this.loadInstancesOfAccountData();
+    this.loadInstancesOfEntitiesData();
   }
 
   loadusersData(): void {
     this.user$ = this.states.loadUsersData().pipe(
-      // map( e => { console.log( e ); return e; }),
       catchError( err => {
         this.showError( err );
-        return throwError(err);
+        return throwError( err );
       } )
     );
-
-    // this.user$.subscribe( e => console.log( e ) )
   }
 
   loadInstnacesOfProviderData(): void {
@@ -129,23 +130,29 @@ export class DashStatsComponent implements OnInit {
   }
 
 
-  loadInstnacesOfEntity(): void {
-    // {
-    //   name: "Net Profit",
-    //   data: [ 44, 55, 57, 56, 61, 58, 63, 60, 66 , 63, 60, 66 ]
-    // },
+  loadInstnacesOfEntityData(): void {
 
     this.instancesOfEntity$ = this.states.loadInstnacesOfEntity().pipe(
       map( elemts => {
-        // let a = {
-        //   name : "",
-        //   data : []
-        // };
 
-        // this.chartOptionsDonut.series = elemts.map( item => item[1] );
-        // this.chartOptionsDonut.labels = elemts.map( item => item[0][0].toUpperCase() + item[0].substr(1).toLowerCase() );
+        const series = [];
+        for ( let i = 1 ; i <= 12 ; i++ ){
+          elemts[i].map( ents => {
+              let indexs = -1 ;
 
-        console.log( elemts );
+              series.map( ( serie , key ) => {
+                if ( serie.name === ents[0] ) { indexs = key; }
+              });
+              if ( indexs === -1 ){
+                series.push({ name : ents[0] , data : [ ents[1] ] });
+              } else {
+                series[indexs].data.push(ents[1]);
+              }
+
+          } );
+        }
+
+        this.chartOptionsColumn.series = series ;
 
         return elemts;
       }),
@@ -157,6 +164,65 @@ export class DashStatsComponent implements OnInit {
 
   }
 
+  loadInstancesOfAccountData(): void{
+    this.instancesOfAccount$ = this.states.loadInstancesOfAccount().pipe(
+      map( elemts => {
+
+        this.chartOptionsDistributedColumns.series[0].data = elemts.map( eps => eps[0] )
+        this.chartOptionsDistributedColumns.xaxis.categories = elemts.map( eps => [ eps[1].replace(/@.*/gi, '') , eps[2] ] )
+        return elemts ;
+      } ),
+      catchError( err => {
+        this.showError( err );
+        return throwError(err);
+      } )
+    );
+
+  }
+  loadInstancesOfEntitiesData(): void {
+    this.instancesOfEntities$ = this.states.loadInstancesOfEntitiesData().pipe(
+      map( elemts => {
+
+        // console.log( elemts )
+
+        let types = [
+          "column",
+          "area" ,
+          "line" ,
+
+        ];
+        let ic = 0 ;
+        const series = [];
+        for ( let i = 1 ; i <= 12 ; i++ ){
+          elemts[i].map( ents => {
+
+              let indexs = -1 ;
+
+              series.map( ( serie , key ) => {
+                if ( serie.name === ents[0] ) { indexs = key; }
+              });
+              if ( indexs === -1 ){
+
+                series.push({ name : ents[0] , type: types[ic] , data : [ ents[1] ] });
+                ic++;
+                if( ic == types.length  ) ic=0;
+              } else {
+                series[indexs].data.push(ents[1]);
+              }
+
+          } );
+        }
+        // console.log( series )
+        this.chartOptionsLineColumnArea.series = series ;
+
+        return elemts;
+      }),
+      catchError( err => {
+        this.showError( err );
+        return throwError(err);
+      } )
+    );
+  }
 
   showError( err ): void {
     this.toastr.error( err.message , err.error );
@@ -187,24 +253,7 @@ export class DashStatsComponent implements OnInit {
 
   loadDonutColumn(): void{
     this.chartOptionsColumn = {
-      series: [
-        {
-          name: "Net Profit",
-          data: [ 44, 55, 57, 56, 61, 58, 63, 60, 66 , 63, 60, 66 ]
-        },
-        {
-          name: "Net Profit",
-          data: [ 44, 55, 57, 56, 61, 58, 63, 60, 66 , 63, 60, 66 ]
-        },
-        {
-          name: "Revenue",
-          data: [ 76, 85, 101, 98, 87, 105, 91, 114, 94 , 63, 60, 66]
-        },
-        {
-          name: "Free Cash Flow",
-          data: [ 35, 41, 36, 26, 45, 48, 52, 53, 41 , 63, 60, 66 ]
-        }
-      ],
+      series: [],
       chart: {
         type: "bar",
         height: 380
@@ -242,7 +291,7 @@ export class DashStatsComponent implements OnInit {
       },
       yaxis: {
         title: {
-          text: "$ (thousands)"
+          text: "(instances)"
         }
       },
       fill: {
@@ -251,7 +300,7 @@ export class DashStatsComponent implements OnInit {
       tooltip: {
         y: {
           formatter: function(val) {
-            return "$ " + val + " thousands";
+            return val + " instaces";
           }
         }
       }
@@ -262,21 +311,27 @@ export class DashStatsComponent implements OnInit {
   loadDonutLineColumnArea(): void {
     this.chartOptionsLineColumnArea = {
       series: [
-        {
-          name: "TEAM A",
-          type: "column",
-          data: [23, 11, 22, 27, 13, 22, 37, 21, 44, 22, 30]
-        },
-        {
-          name: "TEAM B",
-          type: "area",
-          data: [44, 55, 41, 67, 22, 43, 21, 41, 56, 27, 43]
-        },
-        {
-          name: "TEAM C",
-          type: "line",
-          data: [30, 25, 36, 30, 45, 35, 64, 52, 59, 36, 39]
-        }
+        // {
+        //   name: "TEAM A",
+        //   type: "column",
+        //   data: [23, 11, 22, 27, 13, 22, 37, 21, 44, 22, 30]
+        // },
+        // {
+        //   name: "TEAM B",
+        //   type: "area",
+        //   data: [44, 55, 41, 67, 22, 43, 21, 41, 56, 27, 43]
+        // },
+        // {
+        //   name: "TEAM C",
+        //   type: "line",
+        //   data: [30, 25, 36, 30, 45, 35, 64, 52, 59, 36, 39]
+        // },
+
+        // {
+        //   name: "TEAM D",
+        //   type: "column",
+        //   data: [30, 25, 36,  64, 52, 59, 36, 39 , 30, 45, 35]
+        // },
       ],
       chart: {
         height: 370,
@@ -284,7 +339,7 @@ export class DashStatsComponent implements OnInit {
         stacked: false
       },
       stroke: {
-        width: [0, 2, 5],
+        width: [ 0, 2, 5 ],
         curve: "smooth"
       },
       plotOptions: {
@@ -305,17 +360,30 @@ export class DashStatsComponent implements OnInit {
         }
       },
       labels: [
-        "01/01/2003",
-        "02/01/2003",
-        "03/01/2003",
-        "04/01/2003",
-        "05/01/2003",
-        "06/01/2003",
-        "07/01/2003",
-        "08/01/2003",
-        "09/01/2003",
-        "10/01/2003",
-        "11/01/2003"
+
+        "01/01/2020",
+        "02/01/2020",
+        "03/01/2020",
+        "04/01/2020",
+        "05/01/2020",
+        "06/01/2020",
+        "07/01/2020",
+        "08/01/2020",
+        "09/01/2020",
+        "10/01/2020",
+        "11/01/2020"
+
+        // "01/01/2003",
+        // "02/01/2003",
+        // "03/01/2003",
+        // "04/01/2003",
+        // "05/01/2003",
+        // "06/01/2003",
+        // "07/01/2003",
+        // "08/01/2003",
+        // "09/01/2003",
+        // "10/01/2003",
+        // "11/01/2003"
       ],
       markers: {
         size: 0
@@ -348,7 +416,7 @@ export class DashStatsComponent implements OnInit {
     this.chartOptionsDistributedColumns = {
       series: [
         {
-          name: "distibuted",
+          name: "instances Of Account",
           data: [21, 22, 10, 28, 16, 21, 13, 30]
         }
       ],
@@ -390,7 +458,7 @@ export class DashStatsComponent implements OnInit {
         categories: [
           ["John", "Doe"],
           ["Joe", "Smith"],
-          ["Jake", "Williams"],
+          ["Jake", "Williams" , "Williams"],
           "Amber",
           ["Peter", "Brown"],
           ["Mary", "Evans"],

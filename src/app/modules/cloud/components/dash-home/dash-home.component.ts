@@ -114,10 +114,9 @@ loadNavsDataFromBackEnd(): void{
 }
 
 loadInstanceTableDataFromBackEnd():void{
-  this.dataTableInstances$ = this.http.get<Array<any[]>>( `${environment.apiUrl}/home/instancesByAccount` )
+  this.dataTableInstances$ = this.http.get<Array<any[]>>( `${environment.apiUrl}/home/instancesByAccount/5` )
   .pipe(
     map( (datas: Array<any[]>) => {
-      // console.log( datas )
       return datas;
     } )
   );

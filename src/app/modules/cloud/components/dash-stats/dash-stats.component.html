@@ -5,7 +5,7 @@
   <div class="col-md-6 col-xl-7">
     <div class="card p-4">
 
-      <apx-chart
+      <apx-chart *ngIf="instancesOfEntities$ | async"
           [series]="chartOptionsLineColumnArea.series"
           [chart]="chartOptionsLineColumnArea.chart"
           [yaxis]="chartOptionsLineColumnArea.yaxis"
@@ -32,9 +32,9 @@
         <table class="table table-striped table-hover mb-0">
           <thead>
             <tr>
-              <th >User</th>
-              <th >Commit</th>
-              <th>Date</th>
+              <th> User   </th>
+              <th> Commit </th>
+              <th> Date   </th>
             </tr>
           </thead>
           <tbody>
@@ -80,7 +80,7 @@
 
   <div class="col-md-4">
 
-    <apx-chart
+    <apx-chart *ngIf="instancesOfAccount$ | async"
       [series]="chartOptionsDistributedColumns.series"
       [chart]="chartOptionsDistributedColumns.chart"
       [dataLabels]="chartOptionsDistributedColumns.dataLabels"

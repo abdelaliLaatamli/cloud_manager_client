@@ -14,7 +14,6 @@ export class DashInstancesComponent implements OnInit {
 
 
   $providers: Observable<[Provider]> ;
-
   currentProvider: Provider = null ;
 
   constructor(
@@ -29,7 +28,7 @@ export class DashInstancesComponent implements OnInit {
         this.showError( err.error )
         return throwError(err);
       })
-    )
+    );
   }
 
 

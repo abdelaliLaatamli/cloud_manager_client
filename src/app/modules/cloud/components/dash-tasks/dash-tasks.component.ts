@@ -7,12 +7,17 @@ import { catchError, map } from 'rxjs/operators';
 import { AccountsService } from '../../services/accounts/accounts.service';
 import { InstanceService } from '../../services/instances/instance.service';
 import { TasksService } from '../../services/tasks/tasks.service';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+
+declare var $: any;
 
 @Component({
   selector: 'app-dash-tasks',
   templateUrl: './dash-tasks.component.html',
   styleUrls: ['./dash-tasks.component.css']
 })
+
+
 export class DashTasksComponent implements OnInit {
 
   providers$: Observable<Provider[]> ;
@@ -20,6 +25,16 @@ export class DashTasksComponent implements OnInit {
   instances$: Observable<any>;
   tasks$: Observable<any>;
   currentProvider: Provider = null ;
+  accountChoosed: number;
+  accountId: number = -1;
+
+  formAddTask = new FormGroup( {
+
+    delayBetween : new FormControl( null , [ Validators.required ] ) ,
+		operationType : new FormControl( 3 , [ Validators.required ] ) ,
+		instance : new FormControl( null , [ Validators.required ] )
+
+  } );
 
   constructor(
     private providerService: ProvidersService ,
@@ -50,17 +65,16 @@ export class DashTasksComponent implements OnInit {
     this.loadAccounts();
   }
 
-  selectAccount( accountChoosed ): void {
-    // console.log( accountChoosed );
-    this.getInstances( accountChoosed );
-    this.getTasks( accountChoosed );
+  selectAccount( ): void {
+    this.accountChoosed = this.accountId ;
+    this.getInstances( this.accountChoosed );
+    this.getTasks( this.accountChoosed );
   }
 
 
-  getInstances( accountId ){
+  getInstances( accountId ): void {
     this.instances$ = this.instanceService.getInstances(accountId)
                             .pipe(
-                            //  map( e => console.log( e ) ) ,
                               catchError( err => {
                                 this.showError( err.error );
                                 return throwError(err);
@@ -68,7 +82,7 @@ export class DashTasksComponent implements OnInit {
                             );
   }
 
-  getTasks( accountId ){
+  getTasks( accountId ): void{
     this.tasks$ = this.taskService.getTasks(accountId).pipe(
                               catchError( err => {
                                 this.showError( err.error );
@@ -76,7 +90,7 @@ export class DashTasksComponent implements OnInit {
                               })
                             );
 
-    this.tasks$.subscribe( e => console.log( e ) );
+    // this.tasks$.subscribe( e => console.log( e ) );
   }
   loadAccounts(): void{
 
@@ -89,12 +103,65 @@ export class DashTasksComponent implements OnInit {
 
   }
 
+  addTask(): void {
 
-  deleteTask( taskId ): void {
-    console.log( taskId )
+    this.taskService.addTask( this.formAddTask.value ).subscribe(
+        task => {
+
+            this.showSuccess(  task.instance.name , 'success add task' ) ;
+            this.getTasks( this.accountChoosed );
+            this.formAddTask.reset();
+            $('#modal-add-cron').modal('hide');
+        },
+      err =>  this.showError( err.error )
+    );
+
   }
+
+
+  startTask(task): void {
+      this.taskService.updateTask( task.id , 'start' ).subscribe(
+        _ => {
+              this.showSuccess(  task.instance.name , 'success started task' ) ;
+              this.getTasks( this.accountChoosed );
+          },
+        err =>  this.showError( err.error )
+      );
+  }
+
+  stopTask(task): void{
+    this.taskService.updateTask( task.id , 'stop' ).subscribe(
+      _ => {
+            this.showSuccess(  task.instance.name , 'success stoped task' ) ;
+            this.getTasks( this.accountChoosed );
+        },
+      err =>  this.showError( err.error )
+    );
+  }
+
+  deleteTask( task ): void {
+
+    this.taskService.deleteTask( task.id ).subscribe(
+      _ => {
+            this.showSuccess(  task.instance.name , 'success delete task' ) ;
+            this.getTasks( this.accountChoosed );
+        },
+      err =>  this.showError( err.error )
+    );
+
+  }
+
+  showSuccess( instance: string , message ): void {
+    this.toastr.success( instance , message  );
+  }
+
+
   showError( err ): void {
     this.toastr.error( err.message , err.error );
+  }
+
+  showAddCronModal(): void{
+    $('#modal-add-cron').modal('show');
   }
 
 }

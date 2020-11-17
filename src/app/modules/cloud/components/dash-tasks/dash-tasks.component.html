@@ -4,15 +4,196 @@
 
   <div class="col-md-12">
 
-    <ul class="list-group list-group-horizontal d-flex justify-content-center" *ngIf="$providers | async as providers">
+    <ul class="list-group list-group-horizontal d-flex justify-content-center" *ngIf="providers$ | async as providers">
       <li
           class="list-group-item pointer "
           *ngFor="let provider of providers ; index as i "
-          (click)="currentProvider=provider"
+          (click)="selectProvider(provider)"
           [ngClass]="{'active' : currentProvider==provider}"
         >{{provider.name | titlecase}}</li>
     </ul>
 
   </div>
+
+</div>
+
+ <div class="row mt-4" *ngIf="currentProvider" >
+
+  <div class="col-md-10 offset-1">
+
+    <!-- <div class="jumbotron p-2 bg-dark text-white "> -->
+    <div class="jumbotron p-2">
+      <form class="form-inline">
+
+
+        <div class="col-auto  my-1 mr-sm-2 px-2">
+          <div class="input-group input-group-sm">
+            <div class="input-group-prepend">
+              <div class="input-group-text">Account</div>
+            </div>
+            <select class="form-control" #accountAct >
+              <option *ngFor="let account of accounts$ | async"  [value]="account.id"> {{ account.name | slice:0:20 }} </option>
+            </select>
+          </div>
+        </div>
+
+        <button type="button" class="btn btn-primary my-1 mr-1 btn-sm" (click)="selectAccount(accountAct.value)"><i class="fas fa-list"></i></button>
+
+        <!-- <div class="col-auto  my-1 mr-sm-2 px-2" *ngIf="instances$ | async as instances" >
+          <div  class="input-group input-group-sm">
+            <div class="input-group-prepend">
+              <div class="input-group-text">Instances</div>
+            </div>
+            <select class="form-control" >
+              <option *ngFor="let instance of instances"  [value]="instance.database.id"> {{ instance.name }} </option>
+            </select>
+          </div>
+        </div> -->
+<!--
+        <div class="col-auto  my-1 mr-sm-2 px-2" *ngIf="instances$ | async as instances" >
+          <div  class="input-group input-group-sm">
+            <div class="input-group-prepend">
+              <div class="input-group-text">
+                <i class="far fa-clock"></i> / <small>(min)</small>
+              </div>
+            </div>
+            <input class="form-control" placeholder="duration">
+          </div>
+        </div>
+
+
+          <div class="col-auto  my-1 mr-sm-2 px-2" *ngIf="instances$ | async as instances" >
+            <div  class="input-group input-group-sm">
+              <div class="input-group-prepend">
+                <div class="input-group-text">Type</div>
+              </div>
+              <select class="form-control" >
+                <option value="restart"> Restart </option>
+
+              </select>
+            </div>
+          </div>
+
+          <button type="button" class="btn btn-primary my-1 mr-1 btn-sm" *ngIf="instances$ | async as instances" ><i class="fas fa-plus"></i> Cron </button> -->
+
+    </form>
+    </div>
+
+
+  </div>
+
+</div>
+
+<!-- <div class="row mt-4" *ngIf="currentProvider" >
+
+  <div class="col-md-10 offset-1">
+
+    <!-- <div class="jumbotron p-2 bg-dark text-white "> --!>
+    <div class="jumbotron p-2">
+      <form class="form-inline">
+
+
+        <div class="col-auto  my-1 mr-sm-2 px-2">
+          <div class="input-group input-group-sm">
+            <div class="input-group-prepend">
+              <div class="input-group-text">Account</div>
+            </div>
+            <select class="form-control" #accountAct >
+              <option *ngFor="let account of accounts$ | async"  [value]="account.id"> {{ account.name | slice:0:20 }} </option>
+            </select>
+          </div>
+        </div>
+
+        <button type="button" class="btn btn-primary my-1 mr-1 btn-sm" (click)="selectAccount(accountAct.value)"><i class="fas fa-list"></i></button>
+
+        <div class="col-auto  my-1 mr-sm-2 px-2" *ngIf="instances$ | async as instances" >
+          <div  class="input-group input-group-sm">
+            <div class="input-group-prepend">
+              <div class="input-group-text">Instances</div>
+            </div>
+            <select class="form-control" >
+              <option *ngFor="let instance of instances"  [value]="instance.database.id"> {{ instance.name }} </option>
+            </select>
+          </div>
+        </div>
+
+        <div class="col-auto  my-1 mr-sm-2 px-2" *ngIf="instances$ | async as instances" >
+          <div  class="input-group input-group-sm">
+            <div class="input-group-prepend">
+              <div class="input-group-text">
+                <i class="far fa-clock"></i> / <small>(min)</small>
+              </div>
+            </div>
+            <input class="form-control" placeholder="duration">
+          </div>
+        </div>
+
+
+          <div class="col-auto  my-1 mr-sm-2 px-2" *ngIf="instances$ | async as instances" >
+            <div  class="input-group input-group-sm">
+              <div class="input-group-prepend">
+                <div class="input-group-text">Type</div>
+              </div>
+              <select class="form-control" >
+                <option value="restart"> Restart </option>
+
+              </select>
+            </div>
+          </div>
+
+          <button type="button" class="btn btn-primary my-1 mr-1 btn-sm" *ngIf="instances$ | async as instances" ><i class="fas fa-plus"></i> Cron </button>
+
+    </form>
+    </div>
+
+
+  </div>
+
+</div> -->
+
+<div class="row mt-4" *ngIf="currentProvider">
+  <div class="col-md-12">
+  <table class="table table-light">
+    <thead class="thead-dark text-center">
+      <tr>
+        <th>Account</th>
+        <th>Instance</th>
+        <th>Type</th>
+        <th>Delay</th>
+        <th>Last Execution</th>
+        <th>Status(now)</th>
+        <th>Stop/Start</th>
+        <th>Delete</th>
+
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let task of tasks$ | async" class="text-center" >
+        <td> {{ task.instance.account.name }} </td>
+        <th> {{ task.instance.name }} </th>
+        <td> {{ task.operationType }} </td>
+        <td> {{ task.delayBetween  }} (min) </td>
+        <td [ngSwitch]="task.lastExecute">
+          <i *ngSwitchCase="null" class="far fa-times-circle text-danger"> </i>
+          <span *ngSwitchDefault> {{ task.lastExecute | date:'short' }} </span>
+
+        </td>
+        <td [ngClass]="{ 'table-success' : task.started , 'table-danger' : !task.started }">
+            <i [ngClass]="{
+                'far fa-check-circle text-success' : task.started ,
+                'far fa-times-circle text-danger' :  !task.started  }" ></i>
+        </td>
+        <td [ngClass]="{ 'table-success' : !task.stoped , 'table-danger' : task.stoped }" [ngSwitch]="task.stoped" >
+
+          <button *ngSwitchCase="true" class="btn btn-success btn-sm"  >  start  </button>
+          <button *ngSwitchCase="false" class="btn btn-warning btn-sm" >  stop   </button>
+          <button *ngSwitchDefault  > {{ task.stoped }}</button>
+
+        </td>
+        <td> <button class="btn btn-danger btn-sm" (click)="deleteTask( task.id)" > <i class="far fa-trash-alt"></i> </button>  </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
 
 </div>

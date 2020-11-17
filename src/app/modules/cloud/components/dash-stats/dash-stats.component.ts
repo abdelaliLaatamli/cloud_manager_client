@@ -212,7 +212,7 @@ export class DashStatsComponent implements OnInit {
 
           } );
         }
-        // console.log( series )
+
         this.chartOptionsLineColumnArea.series = series ;
 
         return elemts;

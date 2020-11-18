@@ -30,8 +30,8 @@ export class DashTasksComponent implements OnInit {
 
   formAddTask = new FormGroup( {
 
-    delayBetween : new FormControl( null , [ Validators.required ] ) ,
-		operationType : new FormControl( 3 , [ Validators.required ] ) ,
+    delayBetween : new FormControl( '3' , [ Validators.required ] ) ,
+		operationType : new FormControl( null , [ Validators.required ] ) ,
 		instance : new FormControl( null , [ Validators.required ] )
 
   } );
@@ -75,11 +75,13 @@ export class DashTasksComponent implements OnInit {
   getInstances( accountId ): void {
     this.instances$ = this.instanceService.getInstances(accountId)
                             .pipe(
+                              // map( e => { console.log( e ) ; return e }  ),
                               catchError( err => {
                                 this.showError( err.error );
                                 return throwError(err);
                               })
                             );
+
   }
 
   getTasks( accountId ): void{
@@ -90,7 +92,7 @@ export class DashTasksComponent implements OnInit {
                               })
                             );
 
-    // this.tasks$.subscribe( e => console.log( e ) );
+
   }
   loadAccounts(): void{
 
@@ -161,6 +163,13 @@ export class DashTasksComponent implements OnInit {
   }
 
   showAddCronModal(): void{
+    this.formAddTask = new FormGroup( {
+
+      delayBetween : new FormControl( 3 , [ Validators.required , Validators.min( 3 )  ] ) ,
+      operationType : new FormControl( null , [ Validators.required ] ) ,
+      instance : new FormControl( null , [ Validators.required ] )
+
+    } );
     $('#modal-add-cron').modal('show');
   }
 

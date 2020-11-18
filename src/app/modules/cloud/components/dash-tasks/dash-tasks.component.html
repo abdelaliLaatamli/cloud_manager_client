@@ -42,43 +42,6 @@
 
         <button type="button" class="btn btn-primary my-1 mr-1 btn-sm"  [disabled]="accountId==-1"  (click)="selectAccount()"><i class="fas fa-list"></i></button>
 
-        <!-- <div class="col-auto  my-1 mr-sm-2 px-2" *ngIf="instances$ | async as instances" >
-          <div  class="input-group input-group-sm">
-            <div class="input-group-prepend">
-              <div class="input-group-text">Instances</div>
-            </div>
-            <select class="form-control" >
-              <option *ngFor="let instance of instances"  [value]="instance.database.id"> {{ instance.name }} </option>
-            </select>
-          </div>
-        </div> -->
-<!--
-        <div class="col-auto  my-1 mr-sm-2 px-2" *ngIf="instances$ | async as instances" >
-          <div  class="input-group input-group-sm">
-            <div class="input-group-prepend">
-              <div class="input-group-text">
-                <i class="far fa-clock"></i> / <small>(min)</small>
-              </div>
-            </div>
-            <input class="form-control" placeholder="duration">
-          </div>
-        </div>
-
-
-          <div class="col-auto  my-1 mr-sm-2 px-2" *ngIf="instances$ | async as instances" >
-            <div  class="input-group input-group-sm">
-              <div class="input-group-prepend">
-                <div class="input-group-text">Type</div>
-              </div>
-              <select class="form-control" >
-                <option value="restart"> Restart </option>
-
-              </select>
-            </div>
-          </div>
-
-          <button type="button" class="btn btn-primary my-1 mr-1 btn-sm" *ngIf="instances$ | async as instances" ><i class="fas fa-plus"></i> Cron </button> -->
-
     </form>
     </div>
 
@@ -87,72 +50,6 @@
 
 </div>
 
-<!-- <div class="row mt-4" *ngIf="currentProvider" >
-
-  <div class="col-md-10 offset-1">
-
-    <!-- <div class="jumbotron p-2 bg-dark text-white "> --!>
-    <div class="jumbotron p-2">
-      <form class="form-inline">
-
-
-        <div class="col-auto  my-1 mr-sm-2 px-2">
-          <div class="input-group input-group-sm">
-            <div class="input-group-prepend">
-              <div class="input-group-text">Account</div>
-            </div>
-            <select class="form-control" #accountAct >
-              <option *ngFor="let account of accounts$ | async"  [value]="account.id"> {{ account.name | slice:0:20 }} </option>
-            </select>
-          </div>
-        </div>
-
-        <button type="button" class="btn btn-primary my-1 mr-1 btn-sm" (click)="selectAccount(accountAct.value)"><i class="fas fa-list"></i></button>
-
-        <div class="col-auto  my-1 mr-sm-2 px-2" *ngIf="instances$ | async as instances" >
-          <div  class="input-group input-group-sm">
-            <div class="input-group-prepend">
-              <div class="input-group-text">Instances</div>
-            </div>
-            <select class="form-control" >
-              <option *ngFor="let instance of instances"  [value]="instance.database.id"> {{ instance.name }} </option>
-            </select>
-          </div>
-        </div>
-
-        <div class="col-auto  my-1 mr-sm-2 px-2" *ngIf="instances$ | async as instances" >
-          <div  class="input-group input-group-sm">
-            <div class="input-group-prepend">
-              <div class="input-group-text">
-                <i class="far fa-clock"></i> / <small>(min)</small>
-              </div>
-            </div>
-            <input class="form-control" placeholder="duration">
-          </div>
-        </div>
-
-
-          <div class="col-auto  my-1 mr-sm-2 px-2" *ngIf="instances$ | async as instances" >
-            <div  class="input-group input-group-sm">
-              <div class="input-group-prepend">
-                <div class="input-group-text">Type</div>
-              </div>
-              <select class="form-control" >
-                <option value="restart"> Restart </option>
-
-              </select>
-            </div>
-          </div>
-
-          <button type="button" class="btn btn-primary my-1 mr-1 btn-sm" *ngIf="instances$ | async as instances" ><i class="fas fa-plus"></i> Cron </button>
-
-    </form>
-    </div>
-
-
-  </div>
-
-</div> -->
 
 <div class="row mt-4" *ngIf="currentProvider">
   <div class="col-md-12">
@@ -170,7 +67,8 @@
 
       </tr>
     </thead>
-    <tbody>
+    <tbody >
+
       <tr *ngFor="let task of tasks$ | async" class="text-center" >
         <td> {{ task.instance.account.name }} </td>
         <th> {{ task.instance.name }} </th>
@@ -188,12 +86,13 @@
         </td>
         <td [ngClass]="{ 'table-success' : !task.stoped , 'table-danger' : task.stoped }" [ngSwitch]="task.stoped" >
 
-          <button *ngSwitchCase="true" class="btn btn-success btn-sm"  (click)="startTask(task)" >  start  </button>
+          <button *ngSwitchCase="true" class="btn btn-success btn-sm"  (click)="startTask(task)" > start </button>
           <button *ngSwitchCase="false" class="btn btn-warning btn-sm" (click)="stopTask(task)" >  stop   </button>
           <button *ngSwitchDefault  > {{ task.stoped }}</button>
 
         </td>
         <td> <button class="btn btn-danger btn-sm" (click)="deleteTask( task )" > <i class="far fa-trash-alt"></i> </button>  </td>
+
       </tr>
     </tbody>
   </table>
@@ -220,21 +119,49 @@
 
           <div class="form-group">
             <label for="exampleInputEmail1">Instances</label>
-            <select class="form-control form-control-sm"  aria-describedby="emailHelp" formControlName="instance" >
+            <select class="custom-select custom-select-sm is-valid" aria-describedby="emailHelp" formControlName="instance"
+             [ngClass]="{ 'is-valid' : this.formAddTask.get('instance').valid &&
+                        ( this.formAddTask.get('instance').dirty || this.formAddTask.get('instance').touched) ,
+                          'is-invalid' : this.formAddTask.get('instance').invalid &&
+                        ( this.formAddTask.get('instance').dirty || this.formAddTask.get('instance').touched) }" >
+              <option  [ngValue]="null"> Choose Instance </option>
               <option *ngFor="let instance of instances$ | async"  [value]="instance.database.id"> {{ instance.name }} </option>
             </select>
+
+            <!-- <div class="valid-feedback"> Looks good! </div> -->
+
           </div>
 
           <div class="form-group">
               <label for="exampleInputPassword1">Duration <i class="far fa-clock"></i> / <small>(min)</small></label>
-              <input type="number" class="form-control form-control-sm" min="3" value="3" formControlName="delayBetween">
-            </div>
+              <input type="number" class="form-control form-control-sm" min="3" formControlName="delayBetween"
+              [ngClass]="{ 'is-valid' : this.formAddTask.get('delayBetween').valid &&
+                ( this.formAddTask.get('delayBetween').dirty || this.formAddTask.get('delayBetween').touched) ,
+              'is-invalid' : this.formAddTask.get('delayBetween').invalid &&
+              ( this.formAddTask.get('delayBetween').dirty || this.formAddTask.get('delayBetween').touched) }"
+              >
+
+              <div id="validationServer03Feedback" class="invalid-feedback"
+                 *ngIf="this.formAddTask.get('delayBetween').hasError('min')">
+                  The number mast be 3 or more
+              </div>
+          </div>
 
           <div class="form-group">
               <label for="exampleInputPassword1">Type</label>
-              <select class="form-control form-control-sm" formControlName="operationType" >
+              <select class="custom-select custom-select-sm" formControlName="operationType"
+                [ngClass]="{ 'is-valid' : this.formAddTask.get('operationType').valid  &&
+                ( this.formAddTask.get('operationType').dirty || this.formAddTask.get('operationType').touched),
+                'is-invalid' : this.formAddTask.get('operationType').invalid  &&
+                ( this.formAddTask.get('operationType').dirty || this.formAddTask.get('operationType').touched) }"
+              >
+                <option  [ngValue]="null"> Choose Operation </option>
                 <option value="restart"> Restart </option>
               </select>
+
+              <!-- <div id="validationServer03Feedback" class="invalid-feedback">
+                Please provide a valid city.
+              </div> -->
           </div>
 
         </form>

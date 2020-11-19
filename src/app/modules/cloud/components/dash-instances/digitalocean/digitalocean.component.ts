@@ -92,6 +92,7 @@ export class DigitaloceanComponent implements OnInit {
   getServers(){
     this.$instances = this.instanceService.getInstances(this.accountId)
                                           .pipe(
+                                            map( e => { console.log( e ) ; return e; }),
                                             catchError( err => {
                                               this.showError( err.error )
                                               return throwError(err);

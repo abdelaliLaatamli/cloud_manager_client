@@ -81,7 +81,7 @@
         </td>
         <td [ngClass]="{ 'table-success' : task.started , 'table-danger' : !task.started }">
             <i [ngClass]="{
-                'far fa-check-circle text-success' : task.started ,
+                'fas fa-check-circle  text-success' : task.started ,
                 'far fa-times-circle text-danger' :  !task.started  }" ></i>
         </td>
         <td [ngClass]="{ 'table-success' : !task.stoped , 'table-danger' : task.stoped }" [ngSwitch]="task.stoped" >

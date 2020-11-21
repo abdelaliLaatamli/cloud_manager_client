@@ -1,7 +1,7 @@
 <h4>Accounts</h4>
 
 <div class="row mt-5" *ngIf="$providers | async as providers" >
-  <div class="col-4 pr-0">
+  <div class="col-2 pr-0">
     <div class="list-group" id="list-tab" role="tablist">
 
       <a class="list-group-item list-group-item-action pl-2"
@@ -14,7 +14,7 @@
         >{{provider.name | titlecase}}</a>
     </div>
   </div>
-  <div class="col-8">
+  <div class="col-7">
     <div class="tab-content" id="nav-tabContent">
       <div class="tab-pane fade"
           *ngFor="let provider of providers ; index as i "
@@ -22,17 +22,17 @@
           aria-labelledby="{{provider.name}}-{{provider.id}}-list"
         >
         <button class="btn btn-primary mb-1 btn-sm float-right " (click)="showAddAccountModal(provider)" ><i class="fas fa-plus"></i> Accounts</button>
-        <table class="table">
+        <table class="table text-center">
           <thead class="thead-dark">
             <tr *ngIf="currentProvider">
               <th *ngFor="let item of getAccountKeys(currentProvider.providerKeysType)"  scope="col" >{{item | titlecase}}</th>
               <th > operations </th>
             </tr>
           </thead>
-          <tbody>
-            <tr *ngFor="let account of $acconts | async"  >
+          <tbody class="text-center">
+            <tr *ngFor="let account of $acconts | async" (click)="chooseAccount(account)" [ngClass]="{ 'table-primary' : currentAccount==account }" >
               <th  *ngFor="let item of getAccountKeys(currentProvider.providerKeysType)" scope="row">{{ account[item] }}</th>
-              <td class="text-center">
+              <td >
                   <button class="btn btn-warning btn-sm mx-1" (click)="editAccount(account)" > <i class="fas fa-edit"></i>  </button>
                   <button class="btn btn-danger  btn-sm" (click)="deleteAccount(account)"> <i class="fas fa-trash"></i> </button>
               </td>
@@ -46,6 +46,47 @@
 
     </div>
   </div>
+  <div class="col-3">
+
+    <!-- <table class="table" *ngIf="currentAccount != null && attachedUsers$ | async" > -->
+    <table class="table" *ngIf="attachedUsers$ | async as attachedUsers" >
+      <thead class="thead-dark text-center">
+        <tr>
+          <th scope="col"> User name
+                <button
+                    class="btn btn-primary btn-sm"
+                    data-toggle="tooltip"
+                    data-placement="top"
+                    title="Attch User"
+                    (click)="attchingMode=true"
+                  ><i class="fas fa-link"></i></button>
+          </th>
+          <th scope="col">Detach</th>
+        </tr>
+      </thead>
+      <tbody class="text-center">
+        <tr *ngFor="let user of attachedUsers.users" >
+          <th scope="row">{{ user.username }}</th>
+          <td> <button class="btn btn-warning btn-sm" (click)="deattachUser(user.id)"  > <i class="fas fa-unlink"></i> </button> </td>
+        </tr>
+
+        <tr *ngIf="attchingMode == true && users$ | async" >
+          <td>
+            <select class="custom-select custom-select-sm"  #userSelect>
+              <option *ngFor="let user of ( users$ | async ) | filterUsers:currentAccount.users" [value]="user.id" > {{ user.username }} </option>
+            </select>
+          </td>
+          <td><button class="btn btn-primary btn-sm" (click)="attachUser(userSelect.value)">attach</button></td>
+        </tr>
+
+      </tbody>
+    </table>
+
+
+
+  </div>
+
+
 </div>
 
 

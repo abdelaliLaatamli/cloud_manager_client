@@ -71,9 +71,9 @@ export class DigitaloceanComponent implements OnInit {
 
 
   loadAccounts(): void{
-    this.$acconts = this.accountService.getAccount( this.provider.id ).pipe(
+    this.$acconts = this.accountService.getAccounts( this.provider.id ).pipe(
       catchError( err => {
-        this.showError( err.error )
+        this.showError( err.error );
         return throwError(err);
       })
     )

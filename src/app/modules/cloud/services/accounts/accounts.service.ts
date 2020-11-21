@@ -12,11 +12,15 @@ export class AccountsService {
 
   constructor( private http : HttpClient) { }
 
-  getAccount( accountId ): Observable<Account> {
+  getAccounts( accountId ): Observable<Account> {
     const base = this.http.get<Account>(`${environment.apiUrl}/accounts/provider/${accountId}`);
     return base ;
   }
 
+  getAccountDetails( accountId ): Observable<Account>  {
+    const base = this.http.get<Account>(`${environment.apiUrl}/accounts/g/${accountId}`);
+    return base ;
+  }
 
   addAccount( providerId , accountPayload: Account ): Observable<Account>{
 
@@ -25,11 +29,24 @@ export class AccountsService {
     return base;
   }
 
-  editAccount( accountId , accountPayload: Account ) : Observable<Account>{
+  editAccount( accountId , accountPayload: Account ): Observable<Account>{
 
     delete accountPayload.id;
 
     const base = this.http.put<AccountForKeys> ( `${environment.apiUrl}/accounts/${accountId}` , accountPayload );
+    return base;
+
+  }
+
+
+  linkActionUser( userId , accountId , action ) : Observable<Account>{
+
+    const request = {
+      userId: userId ,
+      action: action
+    };
+
+    const base = this.http.put<Account>( `${environment.apiUrl}/accounts/linkaction/${accountId}` , request );
     return base;
 
   }

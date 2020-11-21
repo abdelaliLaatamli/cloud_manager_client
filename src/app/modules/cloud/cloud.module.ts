@@ -24,6 +24,7 @@ import { DigitaloceanComponent } from './components/dash-instances/digitalocean/
 import { AzureComponent } from './components/dash-instances/azure/azure.component';
 import { FilterAccountsActivesPipe } from './pipes/filter-accounts-actives.pipe';
 import { VultrComponent } from './components/dash-instances/vultr/vultr.component';
+import { FilterUsersPipe } from './pipes/filter-users/filter-users.pipe';
 
 
 @NgModule({
@@ -46,6 +47,7 @@ import { VultrComponent } from './components/dash-instances/vultr/vultr.componen
     AzureComponent,
     FilterAccountsActivesPipe,
     VultrComponent,
+    FilterUsersPipe,
 
   ],
   imports: [

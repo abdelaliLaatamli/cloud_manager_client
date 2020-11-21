@@ -77,7 +77,7 @@ export class VultrComponent implements OnInit {
 
   loadAccounts(): void{
 
-    this.accounts$ = this.accountsService.getAccount( this.provider.id ).pipe(
+    this.accounts$ = this.accountsService.getAccounts( this.provider.id ).pipe(
     // map( e => {console.log( e ); return e;}) ,
       catchError( err => {
         this.showError( err.error );

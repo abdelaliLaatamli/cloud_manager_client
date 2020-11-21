@@ -25,7 +25,7 @@ export class DashInstancesComponent implements OnInit {
 
     this.$providers = this.providerService.getProviders().pipe(
       catchError( err => {
-        this.showError( err.error )
+        this.showError( err.error );
         return throwError(err);
       })
     );

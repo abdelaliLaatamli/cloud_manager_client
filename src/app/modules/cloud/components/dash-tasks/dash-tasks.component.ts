@@ -96,7 +96,7 @@ export class DashTasksComponent implements OnInit {
   }
   loadAccounts(): void{
 
-    this.accounts$ = this.accountsService.getAccount( this.currentProvider.id ).pipe(
+    this.accounts$ = this.accountsService.getAccounts( this.currentProvider.id ).pipe(
       catchError( err => {
         this.showError( err.error );
         return throwError(err);

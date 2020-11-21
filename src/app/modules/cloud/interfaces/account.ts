@@ -5,6 +5,7 @@ export interface Account {
   accountType: number;
   proxy?: string;
   active: boolean ;
+  users?:any[]
   // systemId: number
 
 }

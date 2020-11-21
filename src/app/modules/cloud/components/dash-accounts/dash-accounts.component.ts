@@ -77,13 +77,13 @@ export class DashAccountsComponent implements OnInit {
   }
 
   chooseAccount(account): void{
-    this.currentAccount=account;
-    this.attachedUsers$ =this.accountService.getAccountDetails(account.id)
-        .pipe( map(e => { console.log(e ) ; return e }) )
-    this.attchingMode=false;
+    this.currentAccount = account;
+    this.attachedUsers$ = this.accountService.getAccountDetails(account.id);
+        // .pipe( map(e => { console.log(e ) ; return e }) )
+    this.attchingMode = false;
     $(function () {
-      $('[data-toggle="tooltip"]').tooltip()
-    })
+      $('[data-toggle="tooltip"]').tooltip();
+    });
   }
 
   private getAccountKeys(typeProvider) : Array<string> {

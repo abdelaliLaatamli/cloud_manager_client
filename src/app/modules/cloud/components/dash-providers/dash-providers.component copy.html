@@ -1,0 +1,72 @@
+<h4>Providers</h4>
+
+
+<div class="row mt-5" *ngIf="$providers | async as providers" >
+  <div class="col-4 pr-0">
+    <div class="list-group" id="list-tab" role="tablist">
+
+      <a class="list-group-item list-group-item-action pl-2"
+        *ngFor="let provider of providers ; index as i "
+        (click)="chooseProvider(provider)"
+        id="{{provider.name}}-{{provider.id}}-list"
+        data-toggle="list"
+        href="#{{provider.name}}-{{provider.id}}"
+        role="tab" aria-controls="{{provider.name}}"
+        [ngClass]="{'active': i==0}"
+
+        >{{provider.name}}</a>
+    </div>
+  </div>
+  <div class="col-8">
+    <div class="tab-content" id="nav-tabContent">
+      <div class="tab-pane fade show"
+          *ngFor="let provider of providers ; index as i "
+          id="{{provider.name}}-{{provider.id}}" role="tabpanel"
+          aria-labelledby="{{provider.name}}-{{provider.id}}-list"
+          [ngClass]="{'active': i==0}"
+        >
+
+        <table class="table">
+          <thead class="thead-dark">
+            <tr>
+              <th scope="col">ID
+                <button
+                  class="btn btn-primary btn-sm"
+                  data-toggle="tooltip"
+                  data-placement="top"
+                  title="Attch Entity"
+                  (click)="attchingMode=true"
+                ><i class="fas fa-link"></i></button>
+
+              </th>
+              <th scope="col">Entity</th>
+              <th scope="col">Dettach</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let entity of provider.entities"  >
+              <th scope="row">{{ entity.id }}</th>
+              <td>{{ entity.name }}</td>
+              <td><button class="btn btn-warning btn-sm" (click)="dettachEntity(entity.id , provider.id)" > <i class="fas fa-unlink"></i> </button></td>
+            </tr>
+
+            <tr *ngIf="attchingMode == true && entities$ | async" >
+              <td></td>
+              <td>
+                <select class="custom-select custom-select-sm"  #entitySelect>
+                  <!-- <option > Choose Entity </option> -->
+                  <option *ngFor="let entity of ( entities$ | async ) | filterUsers:provider.entities" [value]="entity.id" > {{ entity.name }} </option>
+                </select>
+              </td>
+              <td><button class="btn btn-primary btn-sm" (click)="attachEntity(entitySelect.value)">attach</button></td>
+            </tr>
+          </tbody>
+        </table>
+
+
+      </div>
+
+
+    </div>
+  </div>
+</div>

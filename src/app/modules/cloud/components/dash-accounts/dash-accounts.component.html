@@ -71,6 +71,7 @@
         </tr>
 
         <tr *ngIf="attchingMode == true && users$ | async" >
+
           <td>
             <select class="custom-select custom-select-sm"  #userSelect>
               <option *ngFor="let user of ( users$ | async ) | filterUsers:currentAccount.users" [value]="user.id" > {{ user.username }} </option>

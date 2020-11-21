@@ -13,10 +13,23 @@ export class ProvidersService {
   constructor( private http : HttpClient , private auth : AuthService ) { }
 
 
-  getProviders () : Observable<[Provider]> {
+  getProviders(): Observable<[Provider]> {
 
-      let base = this.http.get<[Provider]>( `${environment.apiUrl}/providers`)
+      const base = this.http.get<[Provider]>( `${environment.apiUrl}/providers`);
       return base ;
+  }
+
+
+  providerlinkActions( entityId , providerId  , action ){
+
+    const request = {
+      entityId : entityId ,
+      action : action
+    };
+
+    const base = this.http.put( `${environment.apiUrl}/providers/actions/${providerId}` , request );
+    return base ;
+
   }
 
 

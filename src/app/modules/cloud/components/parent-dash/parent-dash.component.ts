@@ -9,16 +9,16 @@ import { AuthService } from './../../../../services/auth/auth.service';
 })
 export class ParentDashComponent implements OnInit {
 
-  showSidebare:boolean = true ;
-  isMobile:boolean = false ;
-  user:any = null
+  showSidebare: boolean = true ;
+  isMobile: boolean = false ;
+  user: any = null;
 
-  constructor( private auth : AuthService ) { }
+  constructor( private auth: AuthService ) { }
 
   ngOnInit(): void {
-    this.user = this.auth.getUser()
+    this.user = this.auth.getUser();
     this.checkSize();
-    fromEvent(window, 'resize').subscribe( eve => this.checkSize() )
+    fromEvent(window, 'resize').subscribe( eve => this.checkSize() );
   }
 
   checkSize(): void {
@@ -27,8 +27,8 @@ export class ParentDashComponent implements OnInit {
   }
 
 
-  logout(){
-    this.auth.logout()
+  logout(): void{
+    this.auth.logout();
   }
 
 

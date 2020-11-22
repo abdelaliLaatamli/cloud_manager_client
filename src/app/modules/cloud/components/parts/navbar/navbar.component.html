@@ -35,26 +35,26 @@
       Tasks
     </a>
   </li>
-  <li class="nav-item">
+  <li class="nav-item" *ngIf="user.role == 'LEADER' || user.role == 'IT'">
     <a class="nav-link-dark" routerLink="/dash/statisques" routerLinkActive="nav-item-active text-primary" >
       <i class="fas fa-chart-pie fa-sm mb-1 mx-2"></i>
       Statistiques
     </a>
   </li>
-  <li class="nav-item">
+  <li class="nav-item" *ngIf="user.role == 'IT'"  >
     <a class="nav-link-dark" routerLink="/dash/providers" routerLinkActive="nav-item-active text-primary" >
       <i class="fas fa-building fa-sm mb-1 mx-2"></i>
       Providers
     </a>
   </li>
-  <li class="nav-item">
+  <li class="nav-item" *ngIf="user.role == 'LEADER' || user.role == 'IT'" >
     <a class="nav-link-dark" routerLink="/dash/accounts" routerLinkActive="nav-item-active text-primary">
       <i class="fas fa-address-card fa-sm mb-1 mx-2"></i>
       Accounts
     </a>
   </li>
 
-  <li class="nav-item">
+  <li class="nav-item" *ngIf="user.role == 'LEADER' || user.role == 'IT'"  >
     <a class="nav-link-dark" routerLink="/dash/users" routerLinkActive="nav-item-active text-primary">
       <i class="fas fa-users fa-sm mb-1 mx-2"></i>
       Users

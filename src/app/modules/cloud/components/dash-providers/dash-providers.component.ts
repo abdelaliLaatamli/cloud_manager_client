@@ -71,7 +71,6 @@ export class DashProvidersComponent implements OnInit {
   }
 
   dettachEntity(entityId , providerId ): void {
-    // console.log( entityId , providerId );
 
     this.providerService.providerlinkActions(  entityId , this.currentProvider.id , 'detach').subscribe( e => {
       this.showSuccess(e , 'Entity Deattached');

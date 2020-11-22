@@ -125,7 +125,7 @@
                           'is-invalid' : this.formAddTask.get('instance').invalid &&
                         ( this.formAddTask.get('instance').dirty || this.formAddTask.get('instance').touched) }" >
               <option  [ngValue]="null"> Choose Instance </option>
-              <option *ngFor="let instance of instances$ | async"  [value]="instance.database.id"> {{ instance.name }} </option>
+              <option *ngFor="let instance of instances$ | async"  [value]="instance.database.id"> {{ instance.database.name }} </option>
             </select>
 
             <!-- <div class="valid-feedback"> Looks good! </div> -->
